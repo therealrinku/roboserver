@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'dummy';
+export type Channels = 'fetch-app-servers';
 
 const electronHandler = {
   ipcRenderer: {

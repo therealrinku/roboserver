@@ -1,22 +1,14 @@
-import { FiChevronLeft, FiPlus, FiPower, FiZap } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { FiChevronLeft, FiPower, FiZap } from 'react-icons/fi';
+import { useNavigate, useParams } from 'react-router-dom';
+import useAppState from '../hooks/useAppState';
 
 export default function Server() {
-  const endpoints = [
-    {
-      id: 1,
-      type: 'get',
-      route: '/get_video/{video_id}',
-    },
-    {
-      id: 2,
-      type: 'post',
-      route: '/post_video',
-    },
-  ];
-
   const navigate = useNavigate();
+  const params = useParams();
 
+  const { servers } = useAppState();
+  const server = servers.find((srvr) => srvr.id === Number(params.server_id));
+  const endpoints = server ? server.endpoints : [];
   return (
     <div className="flex flex-col items-center h-screen w-screen pt-2 text-xs">
       <div className="flex items-center w-full justify-center">

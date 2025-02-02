@@ -1,38 +1,37 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import { IServer } from '../global';
 
 interface IRootContext {
-  rootDir: string | null;
+  servers: IServer[];
 }
 
-export const RootContext = createContext<IRootContext>({ rootDir: null });
+export const RootContext = createContext<IRootContext>({ servers: [] });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
-  const [rootDir, setRootDir] = useState<string | null>(null);
+  const demoServer: IServer = {
+    id: 1,
+    name: 'demo server',
+    endpoints: [
+      {
+        id: 1,
+        type: 'get',
+        route: '/g/:id',
+        response: JSON.stringify({
+          data: { person: { id: 1, name: 'Tony Hanks' } },
+        }),
+      },
+    ],
+  };
+  const [servers, setServers] = useState<IServer[]>([demoServer]);
 
   useEffect(() => {
-    const savedRootDir = window.localStorage.getItem('rootDir');
-    if (!savedRootDir) {
-      return;
-    }
-
-    window.electron.ipcRenderer.sendMessage(
-      'check-if-root-dir-exists',
-      savedRootDir,
-    );
-
-    window.electron.ipcRenderer.once('check-if-root-dir-exists', (args) => {
-      if (!!args) {
-        setRootDir(savedRootDir as string);
-      }
-    });
-
-    window.electron.ipcRenderer.on('open-root-dir-selector', (args) => {
-      window.localStorage.setItem('rootDir', args as string);
-      setRootDir(args as string);
+    window.electron.ipcRenderer.sendMessage('fetch-app-servers');
+    window.electron.ipcRenderer.on('fetch-app-servers', (args) => {
+      setServers(args as IServer[]);
     });
   }, []);
 
   return (
-    <RootContext.Provider value={{ rootDir }}>{children}</RootContext.Provider>
+    <RootContext.Provider value={{ servers }}>{children}</RootContext.Provider>
   );
 }
