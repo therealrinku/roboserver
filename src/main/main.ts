@@ -4,10 +4,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import {
-  registerApiClientIpcHandlers,
-  registerApiClientFileSystemIpcHandlers,
-} from './ipc-handlers';
+import { registerIpcHandlers } from './ipc-handlers';
 
 class AppUpdater {
   constructor() {
@@ -19,9 +16,7 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-// all the ipc handlers are here
-registerApiClientIpcHandlers();
-registerApiClientFileSystemIpcHandlers(mainWindow);
+registerIpcHandlers(mainWindow);
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -63,8 +58,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 550,
+    height: 700,
     minWidth: 500,
     minHeight: 400,
     icon: getAssetPath('icon.png'),

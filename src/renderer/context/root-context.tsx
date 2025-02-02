@@ -1,16 +1,27 @@
-import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  PropsWithChildren,
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 import { IServer } from '../global';
 
 interface IRootContext {
   servers: IServer[];
+  setServers: Dispatch<IServer[]>;
 }
 
-export const RootContext = createContext<IRootContext>({ servers: [] });
+export const RootContext = createContext<IRootContext>({
+  servers: [],
+  setServers: () => {},
+});
 
 export function RootContextProvider({ children }: PropsWithChildren) {
   const demoServer: IServer = {
     id: 1,
     name: 'demo server',
+    port: 3000,
     isRunning: false,
     endpoints: [
       {
@@ -34,6 +45,8 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <RootContext.Provider value={{ servers }}>{children}</RootContext.Provider>
+    <RootContext.Provider value={{ servers, setServers }}>
+      {children}
+    </RootContext.Provider>
   );
 }

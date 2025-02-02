@@ -1,6 +1,15 @@
-import { FiPlay, FiPlus, FiSettings, FiTrash2, FiZap } from 'react-icons/fi';
+import {
+  FiPlay,
+  FiPlus,
+  FiSettings,
+  FiTrash2,
+  FiX,
+  FiZap,
+} from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import useAppState from '../hooks/useAppState';
+import AddNew from '../components/common/AddNew';
+import { Fragment, useState } from 'react';
 
 export default function Initiate() {
   return (
@@ -12,21 +21,47 @@ export default function Initiate() {
 }
 
 function TitleBar() {
+  const [showAddNewServerModal, setShowAddNewServerModal] = useState(false);
+
   return (
     <div className="flex items-center w-full justify-center">
-      <b className="flex items-center gap-2">
-        Initiate <FiZap size={15} />
-      </b>
-      <button className="flex items-center gap-2 absolute right-5">
-        <FiPlus size={15} />
+      <div className="flex items-center gap-2 font-bold border-b w-full pb-2 pl-20">
+        {showAddNewServerModal ? (
+          <p>Add New Server</p>
+        ) : (
+          <Fragment>
+            Initiate <FiZap size={15} />
+          </Fragment>
+        )}
+      </div>
+
+      <button
+        className="absolute right-3 top-[10px]"
+        onClick={() => setShowAddNewServerModal((prev) => !prev)}
+      >
+        {showAddNewServerModal ? <FiX size={15} /> : <FiPlus size={15} />}
       </button>
+
+      {showAddNewServerModal && (
+        <AddNew
+          type="server"
+          callback={() => setShowAddNewServerModal(false)}
+        />
+      )}
     </div>
   );
 }
 
 function ServerList() {
-  const { servers } = useAppState();
+  const { servers, deleteServer } = useAppState();
   const navigate = useNavigate();
+
+  function handleDeleteServer(id: number, name: string) {
+    const confirmed = confirm(`You sure want to delete server ${name}?`);
+    if (confirmed) {
+      deleteServer(id);
+    }
+  }
 
   return (
     <div className="self-start mt-5 w-full px-5">
@@ -47,7 +82,9 @@ function ServerList() {
                 <button onClick={() => navigate(`/server/${server.id}`)}>
                   <FiSettings size={15} />
                 </button>
-                <button>
+                <button
+                  onClick={() => handleDeleteServer(server.id, server.name)}
+                >
                   <FiTrash2 size={15} color="red" />
                 </button>
               </div>
