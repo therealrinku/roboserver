@@ -1,0 +1,17 @@
+{
+  "name": "initiate",
+  "version": "0.0.0",
+  "description": "initiate your frontend development with initiate",
+  "license": "MIT",
+  "author": {
+    "name": "Rinku Chaudhari",
+    "url": "https://github.com/therealrinku"
+  },
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
+    "postinstall": "npm run rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
+  },
+  "dependencies": {}
+}
