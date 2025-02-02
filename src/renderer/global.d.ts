@@ -1,10 +1,12 @@
 export interface IServer {
   id: number;
   name: string;
+  isRunning: boolean;
   endpoints: Array<{
     id: number;
     type: string;
     route: string;
-    response: string; //stringified json
+    response: object;
+    isActive: boolean;
   }>;
 }

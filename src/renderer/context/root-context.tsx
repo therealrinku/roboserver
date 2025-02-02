@@ -11,14 +11,16 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   const demoServer: IServer = {
     id: 1,
     name: 'demo server',
+    isRunning: false,
     endpoints: [
       {
         id: 1,
         type: 'get',
         route: '/g/:id',
-        response: JSON.stringify({
+        response: {
           data: { person: { id: 1, name: 'Tony Hanks' } },
-        }),
+        },
+        isActive: true,
       },
     ],
   };

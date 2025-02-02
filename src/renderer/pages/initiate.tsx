@@ -1,4 +1,4 @@
-import { FiPlus, FiZap } from 'react-icons/fi';
+import { FiPlay, FiPlus, FiSettings, FiTrash2, FiZap } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import useAppState from '../hooks/useAppState';
 
@@ -31,21 +31,27 @@ function ServerList() {
   return (
     <div className="self-start mt-5 w-full px-5">
       <b>Servers</b>
-      <div className="mt-2 w-full flex flex-col gap-2">
-        <button className="flex items-center gap-2 flex items-center bg-gray-100 w-full py-[12px] pl-2 border-t border-t-[3px] border-t-green-300">
-          <FiZap size={15} />
-          Add new server
-        </button>
 
+      <div className="mt-2 w-full flex flex-col gap-2">
         {servers.map((server) => {
           return (
-            <button
-              onClick={() => navigate(`/server/${server.id}`)}
-              className="flex items-center gap-2 flex items-center bg-gray-100 w-full py-[12px] pl-2 border-t border-t-[3px]"
+            <div
+              className="flex items-center gap-2 flex items-center bg-gray-200 w-full py-[12px] px-2"
               key={server.id}
             >
-              <FiZap size={15} /> {server.name}
-            </button>
+              <FiZap size={15} /> <b>{server.name}</b>
+              <div className="ml-auto flex items-center gap-5">
+                <button>
+                  <FiPlay size={15} />
+                </button>
+                <button onClick={() => navigate(`/server/${server.id}`)}>
+                  <FiSettings size={15} />
+                </button>
+                <button>
+                  <FiTrash2 size={15} color="red" />
+                </button>
+              </div>
+            </div>
           );
         })}
       </div>
