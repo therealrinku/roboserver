@@ -103,7 +103,7 @@ function AddNewEndpointForm({
 
   function handleAddNewEndpoint() {
     if (!route.trim()) {
-      alert('Route or response cannot be empty.');
+      alert('Route cannot be empty.');
       return;
     }
 

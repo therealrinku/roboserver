@@ -25,6 +25,7 @@ export default function Server() {
 
 function TitleBar() {
   const navigate = useNavigate();
+  const params = useParams();
   const [showAddEndpointModal, setShowAddEndpointModal] = useState(false);
 
   return (
@@ -58,6 +59,7 @@ function TitleBar() {
       {showAddEndpointModal && (
         <AddNew
           type="endpoint"
+          serverId={Number(params.server_id)}
           callback={() => setShowAddEndpointModal(false)}
         />
       )}
