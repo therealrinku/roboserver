@@ -34,11 +34,60 @@ export default function useAppState() {
     setServers(copiedServers);
   }
 
+  function startServer(server: IServer) {
+    const copiedServers = [...servers];
+    const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
+    copiedServers[serverIndex].isLoading = true;
+    setServers(copiedServers);
+
+    window.electron.ipcRenderer.sendMessage('start-server', { ...server });
+
+    window.electron.ipcRenderer.on('start-server', (args) => {
+      //@ts-expect-error FIXME
+      const { server, success } = args;
+
+      copiedServers[serverIndex].isLoading = false;
+
+      if (!success) {
+        alert('something went wrong while starting the server.');
+        return;
+      }
+
+      copiedServers[serverIndex].isRunning = true;
+      setServers(copiedServers);
+    });
+  }
+
+  function stopServer(server: IServer) {
+    const copiedServers = [...servers];
+    const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
+    copiedServers[serverIndex].isLoading = true;
+    setServers(copiedServers);
+
+    window.electron.ipcRenderer.sendMessage('stop-server', { ...server });
+
+    window.electron.ipcRenderer.on('stop-server', (args) => {
+      //@ts-expect-error FIXME
+      const { server, success } = args;
+
+      copiedServers[serverIndex].isLoading = false;
+
+      if (!success) {
+        alert('something went wrong while stopping the server.');
+        return;
+      }
+      copiedServers[serverIndex].isRunning = false;
+      setServers(copiedServers);
+    });
+  }
+
   return {
     servers,
     addNewServer,
     deleteServer,
     addNewEndpoint,
     deleteEndpoint,
+    startServer,
+    stopServer,
   };
 }

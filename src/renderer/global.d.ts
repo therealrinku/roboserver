@@ -3,6 +3,7 @@ export interface IServer {
   name: string;
   port: number;
   isRunning: boolean;
+  isLoading: boolean;
   endpoints: Array<IEndpoint>;
 }
 

@@ -1,9 +1,11 @@
 import {
   FiChevronLeft,
   FiDisc,
+  FiLoader,
   FiPlay,
   FiPlus,
   FiSettings,
+  FiStopCircle,
   FiTrash2,
   FiX,
   FiZap,
@@ -28,6 +30,29 @@ function TitleBar() {
   const params = useParams();
   const [showAddEndpointModal, setShowAddEndpointModal] = useState(false);
 
+  const { servers, startServer, stopServer } = useAppState();
+  const server = servers.find((srvr) => srvr.id === Number(params.server_id));
+
+  if (!server) {
+    return null;
+  }
+
+  function handleStartStopServer() {
+    if (!server) {
+      return;
+    }
+
+    if (server.isLoading) {
+      return;
+    }
+
+    if (server.isRunning) {
+      stopServer(server);
+    } else {
+      startServer(server);
+    }
+  }
+
   return (
     <div className="flex items-center w-full justify-center">
       <div className="flex items-center gap-2 font-bold border-b w-full pb-2 pl-20">
@@ -43,8 +68,17 @@ function TitleBar() {
         )}
 
         {!showAddEndpointModal && (
-          <button className="flex items-center gap-2 absolute right-12 top-[10px]">
-            <FiPlay size={15} />
+          <button
+            className="flex items-center gap-2 absolute right-12 top-[10px]"
+            onClick={handleStartStopServer}
+          >
+            {server.isLoading ? (
+              <FiLoader size={15} />
+            ) : server.isRunning ? (
+              <FiStopCircle size={15} color="red" />
+            ) : (
+              <FiPlay size={15} />
+            )}
           </button>
         )}
 

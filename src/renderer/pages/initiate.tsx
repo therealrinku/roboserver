@@ -1,7 +1,11 @@
 import {
+  FiCloudOff,
+  FiLoader,
+  FiPause,
   FiPlay,
   FiPlus,
   FiSettings,
+  FiStopCircle,
   FiTrash2,
   FiX,
   FiZap,
@@ -12,6 +16,7 @@ import useAppState from '../hooks/useAppState';
 import AddNew from '../components/common/AddNew';
 import { Fragment, useState } from 'react';
 import EmptyState from '../components/common/EmptyState';
+import { IServer } from '../global';
 
 export default function Initiate() {
   return (
@@ -55,13 +60,25 @@ function TitleBar() {
 }
 
 function ServerList() {
-  const { servers, deleteServer } = useAppState();
+  const { servers, deleteServer, stopServer, startServer } = useAppState();
   const navigate = useNavigate();
 
   function handleDeleteServer(id: number, name: string) {
     const confirmed = confirm(`You sure want to delete server ${name}?`);
     if (confirmed) {
       deleteServer(id);
+    }
+  }
+
+  function handleStartStopServer(server: IServer) {
+    if (server.isLoading) {
+      return;
+    }
+
+    if (server.isRunning) {
+      stopServer(server);
+    } else {
+      startServer(server);
     }
   }
 
@@ -87,8 +104,14 @@ function ServerList() {
               <FiZap size={15} /> <b>{server.name}</b>
               <p className="text-gray-500">Port {server.port}</p>
               <div className="ml-auto flex items-center gap-5">
-                <button>
-                  <FiPlay size={15} />
+                <button onClick={() => handleStartStopServer(server)}>
+                  {server.isLoading ? (
+                    <FiLoader size={15} />
+                  ) : server.isRunning ? (
+                    <FiStopCircle size={15} color="red" />
+                  ) : (
+                    <FiPlay size={15} />
+                  )}
                 </button>
                 <button onClick={() => navigate(`/server/${server.id}`)}>
                   <FiSettings size={15} />

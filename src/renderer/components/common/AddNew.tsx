@@ -42,6 +42,7 @@ function AddNewServerForm({ onSuccess }: { onSuccess: () => void }) {
       name: name,
       port: Number(port),
       isRunning: false,
+      isLoading: false,
       endpoints: [],
     };
 
