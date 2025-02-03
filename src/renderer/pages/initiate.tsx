@@ -85,6 +85,7 @@ function ServerList() {
               key={server.id}
             >
               <FiZap size={15} /> <b>{server.name}</b>
+              <p className="text-gray-500">Port {server.port}</p>
               <div className="ml-auto flex items-center gap-5">
                 <button>
                   <FiPlay size={15} />
