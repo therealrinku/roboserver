@@ -72,8 +72,10 @@ function EndpointsList() {
   const server = servers.find((srvr) => srvr.id === Number(params.server_id));
   const endpoints = server ? server.endpoints : [];
 
-  function handleDeleteEndpoint(endpointId: number) {
-    const confirmed = confirm('Are you sure want to delete this endpoint?');
+  function handleDeleteEndpoint(endpointId: number, route: string) {
+    const confirmed = confirm(
+      `Are you sure want to delete the route ${route}?`,
+    );
     if (confirmed) {
       deleteEndpoint(Number(params.server_id), endpointId);
     }
@@ -107,7 +109,11 @@ function EndpointsList() {
                 <button>
                   <FiSettings size={15} />
                 </button>
-                <button onClick={() => handleDeleteEndpoint(endpoint.id)}>
+                <button
+                  onClick={() =>
+                    handleDeleteEndpoint(endpoint.id, endpoint.route)
+                  }
+                >
                   <FiTrash2 size={15} color="red" />
                 </button>
               </div>
