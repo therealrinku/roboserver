@@ -1,5 +1,7 @@
 import {
   FiChevronLeft,
+  FiDisc,
+  FiFrown,
   FiPlay,
   FiPlus,
   FiSettings,
@@ -8,6 +10,7 @@ import {
 } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAppState from '../hooks/useAppState';
+import EmptyState from '../components/common/EmptyState';
 
 export default function Server() {
   return (
@@ -50,6 +53,14 @@ function EndpointsList() {
         </button>
         <b>Endpoints</b>
       </div>
+
+      {endpoints.length === 0 && (
+        <EmptyState
+          iconComponent={<FiDisc size={20} />}
+          text="No any endpoints yet."
+          description="You can add new right now by clicking + button."
+        />
+      )}
 
       <div className="mt-2 w-full flex flex-col gap-2">
         {endpoints.map((endpoint) => {

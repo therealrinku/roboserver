@@ -5,11 +5,13 @@ import {
   FiTrash2,
   FiX,
   FiZap,
+  FiZapOff,
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import useAppState from '../hooks/useAppState';
 import AddNew from '../components/common/AddNew';
 import { Fragment, useState } from 'react';
+import EmptyState from '../components/common/EmptyState';
 
 export default function Initiate() {
   return (
@@ -66,6 +68,14 @@ function ServerList() {
   return (
     <div className="self-start mt-5 w-full px-5">
       <b>Servers</b>
+
+      {servers.length === 0 && (
+        <EmptyState
+          iconComponent={<FiZapOff size={20} />}
+          text="No any servers yet."
+          description="You can add new right now by clicking + button."
+        />
+      )}
 
       <div className="mt-2 w-full flex flex-col gap-2">
         {servers.map((server) => {
