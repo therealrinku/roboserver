@@ -21,15 +21,15 @@ export default function Server() {
 function TitleBar() {
   return (
     <div className="flex items-center w-full justify-center">
-      <b className="flex items-center gap-2">
+      <div className="flex items-center gap-2 font-bold border-b w-full pb-2 pl-20">
         Initiate <FiZap size={15} />
-      </b>
-      <button className="flex items-center gap-2 absolute right-14">
-        <FiPlay size={15} />
-      </button>
-      <button className="flex items-center gap-2 absolute right-5">
-        <FiPlus size={15} />
-      </button>
+        <button className="flex items-center gap-2 absolute right-12 top-[10px]">
+          <FiPlay size={15} />
+        </button>
+        <button className="flex items-center gap-2 absolute right-3 top-[10px]">
+          <FiPlus size={15} />
+        </button>
+      </div>
     </div>
   );
 }
