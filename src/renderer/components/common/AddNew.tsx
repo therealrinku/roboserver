@@ -102,7 +102,7 @@ function AddNewEndpointForm({
   const { addNewEndpoint } = useAppState();
 
   function handleAddNewEndpoint() {
-    if (!route.trim() || !response.trim()) {
+    if (!route.trim()) {
       alert('Route or response cannot be empty.');
       return;
     }
