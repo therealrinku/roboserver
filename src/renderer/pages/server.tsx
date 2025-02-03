@@ -22,9 +22,14 @@ export default function Server() {
 }
 
 function TitleBar() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex items-center w-full justify-center">
       <div className="flex items-center gap-2 font-bold border-b w-full pb-2 pl-20">
+        <button onClick={() => navigate(-1)}>
+          <FiChevronLeft size={15} />
+        </button>
         Initiate <FiZap size={15} />
         <button className="flex items-center gap-2 absolute right-12 top-[10px]">
           <FiPlay size={15} />
@@ -38,7 +43,6 @@ function TitleBar() {
 }
 
 function EndpointsList() {
-  const navigate = useNavigate();
   const params = useParams();
 
   const { servers } = useAppState();
@@ -47,12 +51,7 @@ function EndpointsList() {
 
   return (
     <div className="self-start mt-5 w-full px-5">
-      <div className="flex items-center gap-2">
-        <button onClick={() => navigate(-1)}>
-          <FiChevronLeft size={15} />
-        </button>
-        <b>Endpoints</b>
-      </div>
+      <b>Endpoints</b>
 
       {endpoints.length === 0 && (
         <EmptyState
