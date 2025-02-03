@@ -5,15 +5,16 @@ import useAppState from '../../hooks/useAppState';
 interface Props {
   type: 'server' | 'endpoint';
   callback: () => void;
+  serverId?: number;
 }
 
-export default function AddNew({ type, callback }: Props) {
+export default function AddNew({ type, callback, serverId }: Props) {
   return (
     <div className="fixed top-10 right-0 h-full bg-white shadow-lg w-screen">
       {type === 'server' ? (
         <AddNewServerForm onSuccess={callback} />
       ) : (
-        <AddNewEndpointForm onSuccess={callback} />
+        <AddNewEndpointForm onSuccess={callback} serverId={serverId} />
       )}
     </div>
   );
@@ -86,7 +87,13 @@ function AddNewServerForm({ onSuccess }: { onSuccess: () => void }) {
   );
 }
 
-function AddNewEndpointForm({ onSuccess }: { onSuccess: () => void }) {
+function AddNewEndpointForm({
+  onSuccess,
+  serverId,
+}: {
+  onSuccess: () => void;
+  serverId?: number;
+}) {
   const [type, setType] = useState('get');
   const [route, setRoute] = useState('');
   const [response, setResponse] = useState('');
@@ -99,6 +106,11 @@ function AddNewEndpointForm({ onSuccess }: { onSuccess: () => void }) {
       alert('Route or response cannot be empty.');
       return;
     }
+
+    if (!serverId) {
+      return;
+    }
+
     const endpoint: IEndpoint = {
       id: new Date().getTime() * Math.random(),
       type,
@@ -107,7 +119,7 @@ function AddNewEndpointForm({ onSuccess }: { onSuccess: () => void }) {
       isActive,
     };
 
-    addNewEndpoint(1, endpoint);
+    addNewEndpoint(serverId, endpoint);
     onSuccess();
   }
 
