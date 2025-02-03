@@ -3,11 +3,13 @@ export interface IServer {
   name: string;
   port: number;
   isRunning: boolean;
-  endpoints: Array<{
-    id: number;
-    type: string;
-    route: string;
-    response: object;
-    isActive: boolean;
-  }>;
+  endpoints: Array<IEndpoint>;
+}
+
+export interface IEndpoint {
+  id: number;
+  type: string;
+  route: string;
+  response: object;
+  isActive: boolean;
 }

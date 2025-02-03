@@ -1,16 +1,18 @@
 import {
   FiChevronLeft,
   FiDisc,
-  FiFrown,
   FiPlay,
   FiPlus,
   FiSettings,
   FiTrash2,
+  FiX,
   FiZap,
 } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAppState from '../hooks/useAppState';
 import EmptyState from '../components/common/EmptyState';
+import { Fragment, useState } from 'react';
+import AddNew from '../components/common/AddNew';
 
 export default function Server() {
   return (
@@ -23,21 +25,42 @@ export default function Server() {
 
 function TitleBar() {
   const navigate = useNavigate();
+  const [showAddEndpointModal, setShowAddEndpointModal] = useState(false);
 
   return (
     <div className="flex items-center w-full justify-center">
       <div className="flex items-center gap-2 font-bold border-b w-full pb-2 pl-20">
-        <button onClick={() => navigate(-1)}>
-          <FiChevronLeft size={15} />
-        </button>
-        Initiate <FiZap size={15} />
-        <button className="flex items-center gap-2 absolute right-12 top-[10px]">
-          <FiPlay size={15} />
-        </button>
-        <button className="flex items-center gap-2 absolute right-3 top-[10px]">
-          <FiPlus size={15} />
+        {showAddEndpointModal ? (
+          <p>Add New Endpoint</p>
+        ) : (
+          <Fragment>
+            <button onClick={() => navigate(-1)}>
+              <FiChevronLeft size={15} />
+            </button>
+            Initiate <FiZap size={15} />
+          </Fragment>
+        )}
+
+        {!showAddEndpointModal && (
+          <button className="flex items-center gap-2 absolute right-12 top-[10px]">
+            <FiPlay size={15} />
+          </button>
+        )}
+
+        <button
+          className="flex items-center gap-2 absolute right-3 top-[10px]"
+          onClick={() => setShowAddEndpointModal((prev) => !prev)}
+        >
+          {showAddEndpointModal ? <FiX size={15} /> : <FiPlus size={15} />}
         </button>
       </div>
+
+      {showAddEndpointModal && (
+        <AddNew
+          type="endpoint"
+          callback={() => setShowAddEndpointModal(false)}
+        />
+      )}
     </div>
   );
 }
@@ -45,9 +68,16 @@ function TitleBar() {
 function EndpointsList() {
   const params = useParams();
 
-  const { servers } = useAppState();
+  const { servers, deleteEndpoint } = useAppState();
   const server = servers.find((srvr) => srvr.id === Number(params.server_id));
   const endpoints = server ? server.endpoints : [];
+
+  function handleDeleteEndpoint(endpointId: number) {
+    const confirmed = confirm('Are you sure want to delete this endpoint?');
+    if (confirmed) {
+      deleteEndpoint(Number(params.server_id), endpointId);
+    }
+  }
 
   return (
     <div className="self-start mt-5 w-full px-5">
@@ -77,7 +107,7 @@ function EndpointsList() {
                 <button>
                   <FiSettings size={15} />
                 </button>
-                <button>
+                <button onClick={() => handleDeleteEndpoint(endpoint.id)}>
                   <FiTrash2 size={15} color="red" />
                 </button>
               </div>

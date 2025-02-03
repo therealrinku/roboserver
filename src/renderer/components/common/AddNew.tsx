@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IServer } from '../../global';
+import { IEndpoint, IServer } from '../../global';
 import useAppState from '../../hooks/useAppState';
 
 interface Props {
@@ -13,7 +13,7 @@ export default function AddNew({ type, callback }: Props) {
       {type === 'server' ? (
         <AddNewServerForm onSuccess={callback} />
       ) : (
-        <AddEndpointForm />
+        <AddNewEndpointForm onSuccess={callback} />
       )}
     </div>
   );
@@ -86,10 +86,96 @@ function AddNewServerForm({ onSuccess }: { onSuccess: () => void }) {
   );
 }
 
-function AddEndpointForm() {
+function AddNewEndpointForm({ onSuccess }: { onSuccess: () => void }) {
+  const [type, setType] = useState('get');
+  const [route, setRoute] = useState('');
+  const [response, setResponse] = useState('');
+  const [isActive, setIsActive] = useState(true);
+
+  const { addNewEndpoint } = useAppState();
+
+  function handleAddNewEndpoint() {
+    if (!route.trim() || !response.trim()) {
+      alert('Route or response cannot be empty.');
+      return;
+    }
+    const endpoint: IEndpoint = {
+      id: new Date().getTime() * Math.random(),
+      type,
+      route,
+      response, //fixme
+      isActive,
+    };
+
+    addNewEndpoint(1, endpoint);
+    onSuccess();
+  }
+
   return (
-    <div>
-      <input type="text" className="bg-gray-200 w-full p-2" />
+    <div className="mx-5 mt-5 flex flex-col gap-5 h-full">
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="route">
+          Type
+        </label>
+        <select
+          className="bg-gray-200 w-full p-2 outline-none"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value="get">get</option>
+          <option value="post">post</option>
+          <option value="patch">patch</option>
+          <option value="put">put</option>
+          <option value="delete">delete</option>
+          <option value="options">options</option>
+          <option value="head">head</option>
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="route">
+          Route
+        </label>
+        <input
+          name="route"
+          type="text"
+          className="bg-gray-200 w-full p-2 outline-none"
+          value={route}
+          onChange={(e) => setRoute(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="response">
+          Response
+        </label>
+        <textarea
+          name="response"
+          className="bg-gray-200 w-full p-2 outline-none h-[30vh]"
+          value={response}
+          onChange={(e) => setResponse(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="isActive">
+          Active
+        </label>
+        <input
+          type="checkbox"
+          name="response"
+          className="bg-gray-200 self-start p-2 outline-none"
+          checked={isActive}
+          onChange={() => setIsActive((prev) => !prev)}
+        />
+      </div>
+
+      <button
+        className="bg-green-400 py-2 px-5 self-end font-bold hover:bg-green-500"
+        onClick={handleAddNewEndpoint}
+      >
+        Save
+      </button>
     </div>
   );
 }
