@@ -29,9 +29,10 @@ export function RootContextProvider({ children }: PropsWithChildren) {
         id: 1,
         type: 'get',
         route: '/g/:id',
-        response: {
+        responseCode: '200',
+        response: JSON.stringify({
           data: { person: { id: 1, name: 'Tony Hanks' } },
-        },
+        }),
         isActive: true,
       },
     ],

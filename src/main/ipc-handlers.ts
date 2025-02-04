@@ -37,9 +37,9 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       app[endpoint.type](endpoint.route, (req, res) => {
         const isJson = isValidJson(endpoint.response);
         if (isJson) {
-          res.status(200).json(JSON.parse(endpoint.response));
+          res.status(endpoint.responseCode).json(JSON.parse(endpoint.response));
         } else {
-          res.status(200).send(endpoint.response);
+          res.status(endpoint.responseCode).send(endpoint.response);
         }
       });
     }

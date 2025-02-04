@@ -99,16 +99,22 @@ function AddNewEndpointForm({
   const [route, setRoute] = useState('');
   const [response, setResponse] = useState('');
   const [isActive, setIsActive] = useState(true);
+  const [responseCode, setResponseCode] = useState('200');
 
   const { addNewEndpoint } = useAppState();
 
   function handleAddNewEndpoint() {
+    if (!serverId) {
+      return;
+    }
+
     if (!route.trim()) {
       alert('Route cannot be empty.');
       return;
     }
 
-    if (!serverId) {
+    if (Number.isNaN(responseCode)) {
+      alert('Invalid response code.');
       return;
     }
 
@@ -118,6 +124,7 @@ function AddNewEndpointForm({
       route,
       response, //fixme
       isActive,
+      responseCode,
     };
 
     addNewEndpoint(serverId, endpoint);
@@ -155,6 +162,19 @@ function AddNewEndpointForm({
           className="bg-gray-200 w-full p-2 outline-none"
           value={route}
           onChange={(e) => setRoute(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="responseCode">
+          Response Code
+        </label>
+        <input
+          name="responseCode"
+          type="text"
+          className="bg-gray-200 w-full p-2 outline-none"
+          value={responseCode}
+          onChange={(e) => setResponseCode(e.target.value)}
         />
       </div>
 
