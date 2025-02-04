@@ -103,6 +103,7 @@ function ServerList() {
               <p className="text-gray-500">Port {server.port}</p>
               <div className="ml-auto flex items-center gap-5">
                 <button
+                  className="flex flex-col items-center justify-center"
                   onClick={() => handleStartStopServer(server)}
                   disabled={server.isLoading}
                 >

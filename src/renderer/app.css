@@ -26,15 +26,12 @@ select {
 
 /* loader */
 .loader {
-  margin-top: 3px;
   width: 15px;
   height: 15px;
   border: 2px dotted #000;
   border-radius: 50%;
   display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  animation: rotation 2s linear infinite;
+  animation: rotation 3s linear infinite;
 }
 
 @keyframes rotation {
