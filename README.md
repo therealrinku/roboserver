@@ -6,10 +6,9 @@
 
 ## Features
 
-✨ Minimalistic and simple API builder that can help accerlate frontend development without pushing backend developers too hard
-to get the endpoints ready
+✨ Minimalistic and simple local rest api to iterate your frontend developement asap
 
-✨ Simple but useful
+✨ Just swap the base url once real backend endpoint is ready
 
 ✨ Local only, can be used from anywhere aka no internet needed 🔥
 
