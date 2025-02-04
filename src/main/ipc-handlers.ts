@@ -1,6 +1,8 @@
 import { ipcMain } from 'electron';
 import express from 'express';
+import { readFile } from 'fs';
 import { IncomingMessage, Server, ServerResponse } from 'http';
+import path from 'path';
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   const expressServers: Record<
@@ -9,7 +11,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   > = {};
 
   ipcMain.on('start-server', (event, server) => {
-    const { port } = server;
+    const { port, name, endpoints } = server;
 
     if (!port) {
       event.reply('error-happended', {
@@ -29,8 +31,46 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       return;
     }
 
-    app.get('/ping', (req, res) => {
-      res.json({ success: true, message: 'pong' });
+    app.get('/', (req, res) => {
+      const routeDivs = endpoints
+        .map(
+          //@ts-expect-error FIXME
+          (endpoint) => `
+    <div class="flex justify-center p-2 border rounded w-[85vw]  max-w-[200px]">
+      <a href="http://localhost:${server.port}${endpoint.route}">${endpoint.route}</p>
+    </div>
+  `,
+        )
+        .join('');
+
+      for (let endpoint of endpoints) {
+        //@ts-expect-error FIXME
+        app[endpoint.type](endpoint.route, (req, res) => {
+          res.status(200).send(endpoint.response);
+        });
+      }
+
+      const html = `
+        <html>
+          <head>    
+             <title>Initiate</title>
+             <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+          </head>
+
+          <body>
+             <div class="flex flex-col gap-2 items-center justify-center h-screen w-screen text-xs">
+               <img class="h-16 w-16" src="https://camo.githubusercontent.com/e2d13db311bf5ab7d5fde9c7e27ee3af97785709727b0a69fabe7e45386a9884/68747470733a2f2f63646e2d69636f6e732d706e672e666c617469636f6e2e636f6d2f3132382f323237392f323237393231322e706e67"/>
+                <p>initiate</p>
+
+                <div class="flex flex-col gap-5">
+                  <p class="font-bold">routes</p>
+                  ${routeDivs}
+                </div>
+             </div>
+          </body>
+        </html
+      `;
+      res.send(html);
     });
 
     const httpServer = app.listen(Number(port), () => {
