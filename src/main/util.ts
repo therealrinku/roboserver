@@ -11,3 +11,12 @@ export function resolveHtmlPath(htmlFileName: string) {
   }
   return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
 }
+
+export function isValidJson(text: string) {
+  try {
+    JSON.parse(text);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}

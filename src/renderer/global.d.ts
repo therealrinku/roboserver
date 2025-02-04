@@ -11,6 +11,6 @@ export interface IEndpoint {
   id: number;
   type: string;
   route: string;
-  response: object;
+  response: string;
   isActive: boolean;
 }

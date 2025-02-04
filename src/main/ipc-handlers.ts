@@ -3,6 +3,7 @@ import express from 'express';
 import { readFile } from 'fs';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import path from 'path';
+import { isValidJson } from './util';
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   const expressServers: Record<
@@ -31,6 +32,18 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       return;
     }
 
+    for (let endpoint of endpoints) {
+      //@ts-expect-error FIXME
+      app[endpoint.type](endpoint.route, (req, res) => {
+        const isJson = isValidJson(endpoint.response);
+        if (isJson) {
+          res.status(200).json(JSON.parse(endpoint.response));
+        } else {
+          res.status(200).send(endpoint.response);
+        }
+      });
+    }
+
     app.get('/', (req, res) => {
       const routeDivs = endpoints
         .map(
@@ -42,13 +55,6 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   `,
         )
         .join('');
-
-      for (let endpoint of endpoints) {
-        //@ts-expect-error FIXME
-        app[endpoint.type](endpoint.route, (req, res) => {
-          res.status(200).send(endpoint.response);
-        });
-      }
 
       const html = `
         <html>
