@@ -32,26 +32,13 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       return;
     }
 
-    for (let endpoint of endpoints) {
-      //@ts-expect-error FIXME
-      app[endpoint.type](endpoint.route, (req, res) => {
-        const isJson = isValidJson(endpoint.response);
-        if (isJson) {
-          res.status(endpoint.responseCode).json(JSON.parse(endpoint.response));
-        } else {
-          res.status(endpoint.responseCode).send(endpoint.response);
-        }
-      });
-    }
-
     app.get('/', (req, res) => {
       const routeDivs = endpoints
         .map(
           //@ts-expect-error FIXME
           (endpoint) => `
-    <div class="flex justify-center p-2 border rounded w-[85vw]  max-w-[200px]">
-      <a href="http://localhost:${server.port}${endpoint.route}">${endpoint.route}</p>
-    </div>
+      <a  class="flex justify-center py-[12px] bg-gray-200 w-[85vw] max-w-[300px]" href="http://localhost:${server.port}${endpoint.route}">${endpoint.route}</p>
+    </a>
   `,
         )
         .join('');
@@ -66,9 +53,9 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
           <body>
              <div class="flex flex-col gap-2 items-center justify-center h-screen w-screen text-xs">
                <img class="h-16 w-16" src="https://camo.githubusercontent.com/e2d13db311bf5ab7d5fde9c7e27ee3af97785709727b0a69fabe7e45386a9884/68747470733a2f2f63646e2d69636f6e732d706e672e666c617469636f6e2e636f6d2f3132382f323237392f323237393231322e706e67"/>
-                <p>initiate</p>
+                <p>initiate v0.0.0</p>
 
-                <div class="flex flex-col gap-5">
+                <div class="flex flex-col gap-2 mt-5">
                   <p class="font-bold">routes</p>
                   ${routeDivs}
                 </div>
@@ -78,6 +65,18 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       `;
       res.send(html);
     });
+
+    for (let endpoint of endpoints) {
+      //@ts-expect-error FIXME
+      app[endpoint.type](endpoint.route, (req, res) => {
+        const isJson = isValidJson(endpoint.response);
+        if (isJson) {
+          res.status(endpoint.responseCode).json(JSON.parse(endpoint.response));
+        } else {
+          res.status(endpoint.responseCode).send(endpoint.response);
+        }
+      });
+    }
 
     const httpServer = app.listen(Number(port), () => {
       expressServers[port] = httpServer;
