@@ -37,11 +37,29 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
     const httpServer = app.listen(Number(port), () => {
       console.log(`server running at port ${port}`);
-      expressServers[port] = httpServer;
-      event.reply('start-server', { success: true, server });
     });
 
-    event.reply('start-server', { error: true, server });
+    httpServer.on('error', (err: any) => {
+      if (err.code === 'EADDRINUSE') {
+        event.reply('start-server', {
+          success: true,
+          message: `Server is already running at port ${server.port}`,
+          server,
+        });
+        return;
+      }
+
+      event.reply('start-server', {
+        success: true,
+        message: `Something went wrong while running the server at port ${server.port}. Please try reloading the app.`,
+        server,
+      });
+
+      return;
+    });
+
+    expressServers[port] = httpServer;
+    event.reply('start-server', { sucess: true, server });
   });
 
   ipcMain.on('stop-server', (event, server) => {
@@ -57,6 +75,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     }
 
     expressServers[port].close();
+    delete expressServers[port];
     event.reply('stop-server', { success: true, server });
   });
 }

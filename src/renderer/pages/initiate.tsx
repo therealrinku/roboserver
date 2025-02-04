@@ -1,7 +1,4 @@
 import {
-  FiCloudOff,
-  FiLoader,
-  FiPause,
   FiPlay,
   FiPlus,
   FiSettings,
@@ -17,6 +14,7 @@ import AddNew from '../components/common/AddNew';
 import { Fragment, useState } from 'react';
 import EmptyState from '../components/common/EmptyState';
 import { IServer } from '../global';
+import Loader from '../components/common/Loader';
 
 export default function Initiate() {
   return (
@@ -104,9 +102,12 @@ function ServerList() {
               <FiZap size={15} /> <b>{server.name}</b>
               <p className="text-gray-500">Port {server.port}</p>
               <div className="ml-auto flex items-center gap-5">
-                <button onClick={() => handleStartStopServer(server)}>
+                <button
+                  onClick={() => handleStartStopServer(server)}
+                  disabled={server.isLoading}
+                >
                   {server.isLoading ? (
-                    <FiLoader size={15} />
+                    <Loader />
                   ) : server.isRunning ? (
                     <FiStopCircle size={15} color="red" />
                   ) : (

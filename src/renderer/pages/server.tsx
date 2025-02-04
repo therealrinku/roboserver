@@ -1,7 +1,6 @@
 import {
   FiChevronLeft,
   FiDisc,
-  FiLoader,
   FiPlay,
   FiPlus,
   FiSettings,
@@ -15,6 +14,7 @@ import useAppState from '../hooks/useAppState';
 import EmptyState from '../components/common/EmptyState';
 import { Fragment, useState } from 'react';
 import AddNew from '../components/common/AddNew';
+import Loader from '../components/common/Loader';
 
 export default function Server() {
   return (
@@ -73,7 +73,7 @@ function TitleBar() {
             onClick={handleStartStopServer}
           >
             {server.isLoading ? (
-              <FiLoader size={15} />
+              <Loader />
             ) : server.isRunning ? (
               <FiStopCircle size={15} color="red" />
             ) : (

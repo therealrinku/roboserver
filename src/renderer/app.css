@@ -23,3 +23,25 @@ select {
   background-position-x: 100%;
   background-position-y: 5px;
 }
+
+/* loader */
+.loader {
+  margin-top: 3px;
+  width: 15px;
+  height: 15px;
+  border: 2px dotted #000;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 2s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
