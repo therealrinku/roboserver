@@ -10,6 +10,15 @@ export default function useAppState() {
     setServers((prev) => [...prev, server]);
   }
 
+  function editServer(updatedServer: IServer) {
+    const copiedServers = [...servers];
+    const serverIndex = copiedServers.findIndex(
+      (srvr) => srvr.id === updatedServer.id,
+    );
+    copiedServers[serverIndex] = updatedServer;
+    setServers(copiedServers);
+  }
+
   function deleteServer(serverId: number) {
     //@ts-expect-error
     setServers((prev) => prev.filter((server) => server.id !== serverId));
@@ -22,6 +31,16 @@ export default function useAppState() {
       ...copiedServers[serverIndex].endpoints,
       endpoint,
     ];
+    setServers(copiedServers);
+  }
+
+  function editEndpoint(serverId: number, updatedEndpoint: IEndpoint) {
+    const copiedServers = [...servers];
+    const serverIndex = copiedServers.findIndex((srvr) => srvr.id === serverId);
+    const endpointIndex = copiedServers[serverIndex].endpoints.findIndex(
+      (endpt) => endpt.id === updatedEndpoint.id,
+    );
+    copiedServers[serverIndex].endpoints[endpointIndex] = updatedEndpoint;
     setServers(copiedServers);
   }
 
@@ -60,5 +79,7 @@ export default function useAppState() {
     deleteEndpoint,
     startServer,
     stopServer,
+    editEndpoint,
+    editServer,
   };
 }

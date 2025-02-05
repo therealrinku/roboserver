@@ -1,113 +1,38 @@
-import { useState } from 'react';
-import { IEndpoint, IServer } from '../../global';
-import useAppState from '../../hooks/use-app-state';
+import { useEffect, useState } from 'react';
+import useAppState from '../hooks/use-app-state';
+import { useNavigate } from 'react-router-dom';
+import type { IEndpoint } from '../global';
 
-interface Props {
-  type: 'server' | 'endpoint';
-  callback: () => void;
-  serverId?: number;
-}
-
-export default function AddNew({ type, callback, serverId }: Props) {
-  return (
-    <div className="fixed top-10 right-0 h-full bg-white shadow-lg w-screen">
-      {type === 'server' ? (
-        <AddNewServerForm onSuccess={callback} />
-      ) : (
-        <AddNewEndpointForm onSuccess={callback} serverId={serverId} />
-      )}
-    </div>
-  );
-}
-
-function AddNewServerForm({ onSuccess }: { onSuccess: () => void }) {
-  const { addNewServer, servers } = useAppState();
-
-  const [name, setName] = useState('');
-  const [port, setPort] = useState('');
-
-  function handleAddNewServer() {
-    if (name.trim() === '' || port.trim() === '') {
-      alert('Name or port cannot be empty.');
-      return;
-    }
-
-    if (isNaN(Number(port))) {
-      alert('Port is not valid.');
-      return;
-    }
-
-    const server: IServer = {
-      id: servers.length + 1,
-      name: name,
-      port: Number(port),
-      isRunning: false,
-      isLoading: false,
-      endpoints: [],
-    };
-
-    addNewServer(server);
-    onSuccess();
-  }
-
-  return (
-    <div className="mx-5 mt-5 flex flex-col gap-5 h-full">
-      <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="serverName">
-          Server Name
-        </label>
-        <input
-          name="serverName"
-          type="text"
-          className="bg-gray-200 w-full p-2 outline-none"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="serverPort">
-          Port
-        </label>
-        <input
-          name="serverPort"
-          type="text"
-          className="bg-gray-200 w-full p-2 outline-none"
-          value={port}
-          onChange={(e) => setPort(e.target.value)}
-        />
-      </div>
-
-      <button
-        className="bg-green-400 py-2 px-5 self-end font-bold hover:bg-green-500"
-        onClick={handleAddNewServer}
-      >
-        Save
-      </button>
-    </div>
-  );
-}
-
-function AddNewEndpointForm({
-  onSuccess,
+export default function EndpointForm({
   serverId,
+  isEditMode = false,
+  initialState,
 }: {
-  onSuccess: () => void;
-  serverId?: number;
+  serverId: number;
+  isEditMode?: boolean;
+  initialState?: IEndpoint;
 }) {
+  const navigate = useNavigate();
+
   const [type, setType] = useState('get');
   const [route, setRoute] = useState('');
   const [response, setResponse] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [responseCode, setResponseCode] = useState('200');
 
-  const { addNewEndpoint, servers } = useAppState();
+  useEffect(() => {
+    if (initialState && isEditMode) {
+      setIsActive(initialState.isActive);
+      setResponse(initialState.response);
+      setRoute(initialState.route);
+      setResponseCode(initialState.responseCode);
+      setType(initialState.type);
+    }
+  }, [initialState, isEditMode]);
+
+  const { addNewEndpoint, editEndpoint, servers } = useAppState();
 
   function handleAddNewEndpoint() {
-    if (!serverId) {
-      return;
-    }
-
     if (!route.trim()) {
       alert('Route cannot be empty.');
       return;
@@ -128,8 +53,13 @@ function AddNewEndpointForm({
       responseCode,
     };
 
-    addNewEndpoint(serverId, endpoint);
-    onSuccess();
+    if (isEditMode) {
+      editEndpoint(serverId, endpoint);
+    } else {
+      addNewEndpoint(serverId, endpoint);
+    }
+
+    navigate(-1);
   }
 
   return (

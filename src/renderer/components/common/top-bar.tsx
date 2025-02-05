@@ -1,5 +1,7 @@
 import {
   FiChevronLeft,
+  FiExternalLink,
+  FiGithub,
   FiPlay,
   FiPlus,
   FiStopCircle,
@@ -17,14 +19,14 @@ export default function TopBar() {
   const { servers, startServer, stopServer } = useAppState();
   const isHomepage = route.pathname === '/';
   const isServerDetailPage = route.pathname.includes('/server/');
+  const serverId = Number(route.pathname.split('/').pop());
 
   const server = useMemo(() => {
     if (!isServerDetailPage) {
       return null;
     }
 
-    const serverIdStr = route.pathname.split('/').pop();
-    const srvr = servers.find((s) => s.id === Number(serverIdStr));
+    const srvr = servers.find((s) => s.id === serverId);
     return srvr;
   }, [servers, isServerDetailPage]);
 
@@ -32,7 +34,7 @@ export default function TopBar() {
     if (isHomepage) {
       return (
         <div className="flex items-center gap-2 ml-auto">
-          <button>
+          <button onClick={() => navigate(`/new/server`)}>
             <FiPlus size={15} />
           </button>
         </div>
@@ -61,7 +63,7 @@ export default function TopBar() {
               <FiPlay size={15} />
             )}
           </button>
-          <button>
+          <button onClick={() => navigate(`/new/endpoint/${serverId}`)}>
             <FiPlus size={15} />
           </button>
         </div>
@@ -73,8 +75,13 @@ export default function TopBar() {
     if (isHomepage) {
       return (
         <div className="flex items-center gap-2">
-          <FiZap size={15} />
-          <p className="font-bold">Initiate</p>
+          <a
+            target="_blank"
+            href="https://github.com/therealrinku/initiate"
+            className="flex items-center gap-1"
+          >
+            <span className="font-bold">initiate v0.0.0</span>
+          </a>
         </div>
       );
     }
