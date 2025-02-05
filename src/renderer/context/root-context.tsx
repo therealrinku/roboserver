@@ -40,7 +40,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       },
     ],
   };
-  const [servers, setServers] = useState<IServer[]>([]);
+  const [servers, setServers] = useState<IServer[]>([demoServer]);
 
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage('fetch-app-servers');

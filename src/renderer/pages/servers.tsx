@@ -1,58 +1,23 @@
 import {
   FiPlay,
-  FiPlus,
   FiSettings,
   FiStopCircle,
   FiTrash2,
-  FiX,
   FiZap,
   FiZapOff,
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import useAppState from '../hooks/useAppState';
-import AddNew from '../components/common/AddNew';
-import { Fragment, useState } from 'react';
-import EmptyState from '../components/common/EmptyState';
-import { IServer } from '../global';
-import Loader from '../components/common/Loader';
+import useAppState from '../hooks/use-app-state';
+import EmptyState from '../components/common/empty-state';
+import Loader from '../components/common/loading';
+import TopBar from '../components/common/top-bar';
+import type { IServer } from '../global';
 
-export default function Initiate() {
+export default function Servers() {
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-2 text-xs">
-      <TitleBar />
+    <div className="flex flex-col items-center h-screen w-screen text-xs gap-4">
+      <TopBar />
       <ServerList />
-    </div>
-  );
-}
-
-function TitleBar() {
-  const [showAddNewServerModal, setShowAddNewServerModal] = useState(false);
-
-  return (
-    <div className="flex items-center w-full justify-center">
-      <div className="flex items-center gap-2 font-bold border-b w-full pb-2 pl-20">
-        {showAddNewServerModal ? (
-          <p>Add New Server</p>
-        ) : (
-          <Fragment>
-            Initiate <FiZap size={15} />
-          </Fragment>
-        )}
-      </div>
-
-      <button
-        className="absolute right-3 top-[10px]"
-        onClick={() => setShowAddNewServerModal((prev) => !prev)}
-      >
-        {showAddNewServerModal ? <FiX size={15} /> : <FiPlus size={15} />}
-      </button>
-
-      {showAddNewServerModal && (
-        <AddNew
-          type="server"
-          callback={() => setShowAddNewServerModal(false)}
-        />
-      )}
     </div>
   );
 }
@@ -81,7 +46,7 @@ function ServerList() {
   }
 
   return (
-    <div className="self-start mt-5 w-full px-5">
+    <div className="w-full px-5">
       <b>Servers</b>
 
       {servers.length === 0 && (
