@@ -51,14 +51,15 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
           </head>
 
           <body>
-             <div class="flex flex-col gap-2 items-center justify-center h-screen w-screen text-xs">
+             <div class="flex flex-col gap-2 items-center justify-center h-screen w-screen text-xs text-center">
                <img class="h-16 w-16" src="https://camo.githubusercontent.com/e2d13db311bf5ab7d5fde9c7e27ee3af97785709727b0a69fabe7e45386a9884/68747470733a2f2f63646e2d69636f6e732d706e672e666c617469636f6e2e636f6d2f3132382f323237392f323237393231322e706e67"/>
                 <p>initiate v0.0.0</p>
 
-                <div class="flex flex-col gap-2 mt-5">
-                  <p class="font-bold">routes</p>
+                <div class="flex flex-col gap-2 mt-5 ${endpoints.length === 0 && 'hidden'}">
                   ${routeDivs}
                 </div>
+                
+                <p class="${endpoints.length > 0 && 'hidden'} mt-5">No any routes added yet.</p>                
              </div>
           </body>
         </html

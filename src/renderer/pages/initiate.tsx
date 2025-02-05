@@ -119,7 +119,9 @@ function ServerList() {
                   <FiSettings size={15} />
                 </button>
                 <button
+                  disabled={server.isLoading || server.isRunning}
                   onClick={() => handleDeleteServer(server.id, server.name)}
+                  className="disabled:opacity-50"
                 >
                   <FiTrash2 size={15} color="red" />
                 </button>
