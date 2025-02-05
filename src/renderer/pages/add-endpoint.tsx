@@ -7,7 +7,7 @@ export default function AddEndpoint() {
   const serverId = Number(params.server_id);
 
   return (
-    <div className="h-full bg-white text-xs">
+    <div className="h-full bg-white text-xs flex flex-col gap-5">
       <TopBar/>
       <EndpointForm serverId={serverId} />
     </div>

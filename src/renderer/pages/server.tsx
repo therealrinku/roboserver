@@ -1,5 +1,5 @@
 import { FiDisc, FiSettings, FiTrash2 } from 'react-icons/fi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useAppState from '../hooks/use-app-state';
 import EmptyState from '../components/common/empty-state';
 import TopBar from '../components/common/top-bar';
@@ -15,6 +15,7 @@ export default function Server() {
 
 function EndpointsList() {
   const params = useParams();
+  const navigate = useNavigate();
 
   const { servers, deleteEndpoint } = useAppState();
   const server = servers.find((srvr) => srvr.id === Number(params.server_id));
@@ -54,7 +55,11 @@ function EndpointsList() {
               <p>{endpoint.route}</p>
 
               <div className="ml-auto flex items-center gap-5">
-                <button>
+                <button
+                  onClick={() =>
+                    navigate(`/edit-endpoint/${server?.id}/${endpoint.id}`)
+                  }
+                >
                   <FiSettings size={15} />
                 </button>
                 <button

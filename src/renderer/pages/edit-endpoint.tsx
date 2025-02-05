@@ -13,7 +13,7 @@ export default function EditEndpoint() {
   const endpoint = server?.endpoints.find((endpt) => endpt.id === endpointId);
 
   return (
-    <div className="h-full bg-white text-xs">
+    <div className="h-full bg-white text-xs flex flex-col gap-5">
       <TopBar />
       <EndpointForm
         serverId={serverId}

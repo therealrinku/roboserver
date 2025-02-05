@@ -11,7 +11,7 @@ export default function EditServer() {
   const server = servers.find((srvr) => srvr.id === serverId);
 
   return (
-    <div className="h-full bg-white text-xs">
+    <div className="h-full bg-white text-xs flex flex-col gap-5">
       <TopBar />
       <ServerForm isEditMode={true} initialState={server} />
     </div>

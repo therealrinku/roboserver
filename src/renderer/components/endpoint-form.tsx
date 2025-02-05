@@ -45,7 +45,12 @@ export default function EndpointForm({
 
     const server = servers.find((srvr) => srvr.id === serverId);
     const endpoint: IEndpoint = {
-      id: server ? server.endpoints.length + 1 : 1,
+      id:
+        isEditMode && initialState
+          ? initialState.id
+          : server
+            ? server.endpoints.length + 1
+            : 1,
       type,
       route,
       response,
@@ -63,7 +68,7 @@ export default function EndpointForm({
   }
 
   return (
-    <div className="mx-5 mt-5 flex flex-col gap-5 h-full">
+    <div className="mx-5 flex flex-col gap-5 h-full">
       <div className="flex flex-col gap-2">
         <label className="font-bold" htmlFor="route">
           Type
