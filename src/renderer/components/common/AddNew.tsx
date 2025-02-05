@@ -21,7 +21,7 @@ export default function AddNew({ type, callback, serverId }: Props) {
 }
 
 function AddNewServerForm({ onSuccess }: { onSuccess: () => void }) {
-  const { addNewServer } = useAppState();
+  const { addNewServer, servers } = useAppState();
 
   const [name, setName] = useState('');
   const [port, setPort] = useState('');
@@ -38,7 +38,7 @@ function AddNewServerForm({ onSuccess }: { onSuccess: () => void }) {
     }
 
     const server: IServer = {
-      id: new Date().getTime() * Math.random(),
+      id: servers.length + 1,
       name: name,
       port: Number(port),
       isRunning: false,
@@ -101,7 +101,7 @@ function AddNewEndpointForm({
   const [isActive, setIsActive] = useState(true);
   const [responseCode, setResponseCode] = useState('200');
 
-  const { addNewEndpoint } = useAppState();
+  const { addNewEndpoint, servers } = useAppState();
 
   function handleAddNewEndpoint() {
     if (!serverId) {
@@ -118,11 +118,12 @@ function AddNewEndpointForm({
       return;
     }
 
+    const server = servers.find((srvr) => srvr.id === serverId);
     const endpoint: IEndpoint = {
-      id: new Date().getTime() * Math.random(),
+      id: server ? server.endpoints.length + 1 : 1,
       type,
       route,
-      response, //fixme
+      response,
       isActive,
       responseCode,
     };

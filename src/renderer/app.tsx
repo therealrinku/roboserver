@@ -6,14 +6,14 @@ import './app.css';
 
 export default function App() {
   return (
-    <Router>
-      <RootContextProvider>
+    <RootContextProvider>
+      <Router>
         <Routes>
           <Route path="/" Component={SetupApp} />
           <Route path="/server/:server_id" Component={Server} />
         </Routes>
-      </RootContextProvider>
-    </Router>
+      </Router>
+    </RootContextProvider>
   );
 }
 

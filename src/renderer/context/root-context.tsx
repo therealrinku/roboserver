@@ -40,7 +40,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       },
     ],
   };
-  const [servers, setServers] = useState<IServer[]>([demoServer]);
+  const [servers, setServers] = useState<IServer[]>([]);
 
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage('fetch-app-servers');
@@ -48,35 +48,41 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       setServers(args as IServer[]);
     });
 
+    window.electron.ipcRenderer.on('error-happened', (args) => {
+      //@ts-expect-error FIXME
+      alert(args.message || 'Something went wrong');
+    });
+  }, []);
+
+  useEffect(() => {
     window.electron.ipcRenderer.on('start-server', (args) => {
       //@ts-expect-error FIXME
       const { server } = args;
 
-      const copiedServers = [...servers];
-      const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
-      copiedServers[serverIndex].isLoading = false;
+      setServers((prevStateOfServers) => {
+        const copiedServers = [...prevStateOfServers];
+        const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
+        copiedServers[serverIndex].isLoading = false;
 
-      copiedServers[serverIndex].isRunning = true;
-      setServers(copiedServers);
+        copiedServers[serverIndex].isRunning = true;
+        return copiedServers;
+      });
     });
 
     window.electron.ipcRenderer.on('stop-server', (args) => {
       //@ts-expect-error FIXME
       const { server } = args;
 
-      const copiedServers = [...servers];
-      const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
-      copiedServers[serverIndex].isLoading = false;
+      setServers((prevStateOfServers) => {
+        const copiedServers = [...prevStateOfServers];
+        const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
+        copiedServers[serverIndex].isLoading = false;
 
-      copiedServers[serverIndex].isRunning = false;
-      setServers(copiedServers);
+        copiedServers[serverIndex].isRunning = false;
+        return copiedServers;
+      });
     });
-
-    window.electron.ipcRenderer.on('error-happened', (args) => {
-      //@ts-expect-error FIXME
-      alert(args.message || 'Something went wrong');
-    });
-  }, []);
+  }, [servers]);
 
   return (
     <RootContext.Provider value={{ servers, setServers }}>
