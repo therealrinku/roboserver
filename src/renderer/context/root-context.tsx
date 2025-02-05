@@ -50,7 +50,17 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
     window.electron.ipcRenderer.on('error-happened', (args) => {
       //@ts-expect-error FIXME
-      alert(args.message || 'Something went wrong');
+      const { server, message } = args;
+      alert(message || 'Something went wrong');
+
+      setServers((prevStateOfServers) => {
+        const copiedServers = [...prevStateOfServers];
+        const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
+        copiedServers[serverIndex].isLoading = false;
+        copiedServers[serverIndex].isRunning = false;
+
+        return copiedServers;
+      });
     });
   }, []);
 
@@ -63,8 +73,8 @@ export function RootContextProvider({ children }: PropsWithChildren) {
         const copiedServers = [...prevStateOfServers];
         const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
         copiedServers[serverIndex].isLoading = false;
-
         copiedServers[serverIndex].isRunning = true;
+
         return copiedServers;
       });
     });
@@ -77,8 +87,8 @@ export function RootContextProvider({ children }: PropsWithChildren) {
         const copiedServers = [...prevStateOfServers];
         const serverIndex = copiedServers.findIndex((s) => s.id === server.id);
         copiedServers[serverIndex].isLoading = false;
-
         copiedServers[serverIndex].isRunning = false;
+
         return copiedServers;
       });
     });

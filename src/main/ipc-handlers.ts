@@ -82,6 +82,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     const httpServer = app.listen(Number(port), () => {
       expressServers[port] = httpServer;
       console.log(`server running at port ${port}`);
+      event.reply('start-server', { server });
     });
 
     httpServer.on('error', (err: any) => {
@@ -100,8 +101,6 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
       return;
     });
-
-    event.reply('start-server', { server });
   });
 
   ipcMain.on('stop-server', (event, server) => {
