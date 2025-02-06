@@ -6,7 +6,7 @@ import TopBar from '../components/common/top-bar';
 
 export default function Servers() {
   return (
-    <div className="flex flex-col items-center h-screen w-screen text-xs gap-4">
+    <div className="flex flex-col items-center h-screen w-screen text-xs gap-2">
       <TopBar />
       <ServerList />
     </div>
@@ -19,8 +19,6 @@ function ServerList() {
 
   return (
     <div className="w-full px-5">
-      <b>Servers</b>
-
       {servers.length === 0 && (
         <EmptyState
           iconComponent={<FiZapOff size={20} />}

@@ -4,6 +4,7 @@ export type Channels =
   | 'fetch-app-servers'
   | 'start-server'
   | 'stop-server'
+  | 'restart-server'
   | 'error-happened';
 
 const electronHandler = {

@@ -6,6 +6,7 @@ import {
   FiStopCircle,
   FiTool,
   FiTrash2,
+  FiX,
 } from 'react-icons/fi';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAppState from '../../hooks/use-app-state';
@@ -19,6 +20,10 @@ export default function TopBar() {
   const { servers, startServer, stopServer, deleteServer } = useAppState();
   const isHomepage = route.pathname === '/';
   const isServerDetailPage = route.pathname.includes('/server/');
+  const isAddNewServerPage = route.pathname === '/new-server';
+  const isEditServerPage = route.pathname.includes('/edit-server');
+  const isAddNewEndpointPage = route.pathname.includes('/new-endpoint');
+  const isEditEndpointPage = route.pathname.includes('/edit-endpoint');
 
   const server = useMemo(() => {
     if (!isServerDetailPage) {
@@ -31,6 +36,21 @@ export default function TopBar() {
   }, [servers, isServerDetailPage]);
 
   function renderToolbar() {
+    if (
+      isAddNewEndpointPage ||
+      isAddNewServerPage ||
+      isEditEndpointPage ||
+      isEditServerPage
+    ) {
+      return (
+        <div className="flex items-center ml-auto">
+          <button onClick={() => navigate(-1)}>
+            <FiX size={15} />
+          </button>
+        </div>
+      );
+    }
+
     if (isHomepage) {
       return (
         <div className="flex items-center gap-2 ml-auto">
@@ -94,30 +114,51 @@ export default function TopBar() {
   }
 
   function renderLeft() {
+    if (isAddNewServerPage) {
+      return (
+        <div className="flex items-center">
+          <b>Add New Server</b>
+        </div>
+      );
+    }
+
+    if (isAddNewEndpointPage) {
+      return (
+        <div className="flex items-center">
+          <b>Add New Endpoint</b>
+        </div>
+      );
+    }
+
+    if (isEditServerPage) {
+      return (
+        <div className="flex items-center">
+          <b>Edit Server</b>
+        </div>
+      );
+    }
+
+    if (isEditEndpointPage) {
+      return (
+        <div className="flex items-center">
+          <b>Edit Endpoint</b>
+        </div>
+      );
+    }
+
     if (isHomepage) {
       return (
-        <div className="flex items-center gap-2">
-          <a
-            target="_blank"
-            href="https://github.com/therealrinku/initiate"
-            className="flex items-center gap-1"
-          >
-            <span className="font-bold">initiate v0.0.0</span>
-          </a>
+        <div className="flex items-center">
+          <b>Servers</b>
         </div>
       );
     }
 
     return (
-      <div className="flex items-center">
-        <button
-          className="flex items-center gap-1"
-          onClick={() => navigate(-1)}
-        >
-          <FiChevronLeft size={15} />
-          <span>Back</span>
-        </button>
-      </div>
+      <button className="flex items-center gap-1" onClick={() => navigate(-1)}>
+        <FiChevronLeft size={15} />
+        <b>Endpoints</b>
+      </button>
     );
   }
 

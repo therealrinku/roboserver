@@ -1,8 +1,6 @@
-import { ipcMain } from 'electron';
+import { ipcMain, ipcRenderer } from 'electron';
 import express from 'express';
-import { readFile } from 'fs';
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import path from 'path';
 import { isValidJson } from './util';
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
@@ -11,8 +9,32 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     Server<typeof IncomingMessage, typeof ServerResponse>
   > = {};
 
+  //do better implmentation later maybe?
+  ipcMain.on('restart-server', (event, server) => {
+    const { port } = server;
+
+    if (!expressServers[port]) {
+      return;
+    }
+
+    expressServers[port].close((err) => {
+      if (err) {
+        event.reply('error-happened', {
+          message: `Failed to stop the server on port ${server.port}.`,
+          server,
+        });
+      } else {
+        delete expressServers[port];
+      }
+      console.log(`server running at port ${port} has been stopped.`);
+
+      event.reply('stop-server', { server });
+      // ipcRenderer.send('start-server', { server });
+    });
+  });
+
   ipcMain.on('start-server', (event, server) => {
-    const { port, name, endpoints } = server;
+    const { port, endpoints } = server;
 
     if (!port) {
       event.reply('error-happended', {

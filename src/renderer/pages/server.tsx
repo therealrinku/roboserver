@@ -6,7 +6,7 @@ import TopBar from '../components/common/top-bar';
 
 export default function Server() {
   return (
-    <div className="flex flex-col items-center h-screen w-screen text-xs gap-4">
+    <div className="flex flex-col items-center h-screen w-screen text-xs gap-2">
       <TopBar />
       <EndpointsList />
     </div>
@@ -32,8 +32,6 @@ function EndpointsList() {
 
   return (
     <div className="w-full px-5">
-      <b>Endpoints</b>
-
       {endpoints.length === 0 && (
         <EmptyState
           iconComponent={<FiDisc size={20} />}

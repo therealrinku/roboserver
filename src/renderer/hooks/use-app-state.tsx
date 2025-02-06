@@ -42,6 +42,11 @@ export default function useAppState() {
     );
     copiedServers[serverIndex].endpoints[endpointIndex] = updatedEndpoint;
     setServers(copiedServers);
+
+    window.electron.ipcRenderer.sendMessage(
+      'restart-server',
+      {...copiedServers[serverIndex]},
+    );
   }
 
   function deleteEndpoint(serverId: number, endpointId: number) {
