@@ -1,10 +1,10 @@
 import {
   FiChevronLeft,
+  FiLink,
   FiPause,
   FiPlay,
   FiPlus,
-  FiStopCircle,
-  FiTool,
+  FiSettings,
   FiTrash2,
   FiX,
 } from 'react-icons/fi';
@@ -103,7 +103,14 @@ export default function TopBar() {
             className="disabled:opacity-50"
             onClick={() => navigate(`/edit-server/${server?.id}`)}
           >
-            <FiTool size={15} />
+            <FiSettings size={15} />
+          </button>
+          <button
+            disabled={!server?.isRunning}
+            className="disabled:opacity-50"
+            onClick={() => window.open(`http://localhost:${server?.port}`)}
+          >
+            <FiLink size={15} />
           </button>
           <button onClick={() => navigate(`/new-endpoint/${server?.id}`)}>
             <FiPlus size={15} />
