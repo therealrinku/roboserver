@@ -52,6 +52,7 @@ function EndpointsList() {
               </p>
               <p>{endpoint.route}</p>
 
+              {!endpoint.isActive && <p className="text-red-500">Inactive</p>}
               <div className="ml-auto flex items-center gap-5">
                 <button
                   onClick={() =>
