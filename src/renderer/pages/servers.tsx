@@ -1,8 +1,9 @@
-import { FiZap, FiZapOff } from 'react-icons/fi';
+import { FiPause, FiPlay, FiZap, FiZapOff } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import useAppState from '../hooks/use-app-state';
 import EmptyState from '../components/common/empty-state';
 import TopBar from '../components/common/top-bar';
+import Loading from '../components/common/loading';
 
 export default function Servers() {
   return (
@@ -14,7 +15,7 @@ export default function Servers() {
 }
 
 function ServerList() {
-  const { servers } = useAppState();
+  const { servers, startServer, stopServer } = useAppState();
   const navigate = useNavigate();
 
   return (
@@ -37,6 +38,22 @@ function ServerList() {
             >
               <FiZap size={15} /> <b>{server.name}</b>
               <p className="text-gray-500">Port {server.port}</p>
+              <button
+                className="ml-auto flex flex-col items-center justify-center"
+                disabled={server.isLoading}
+                onClick={(e) => {
+                  server.isRunning ? stopServer(server) : startServer(server);
+                  e.stopPropagation();
+                }}
+              >
+                {server?.isLoading ? (
+                  <Loading />
+                ) : server?.isRunning ? (
+                  <FiPause color="red" size={15} />
+                ) : (
+                  <FiPlay size={15} />
+                )}
+              </button>
             </button>
           );
         })}
