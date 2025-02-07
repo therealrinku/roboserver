@@ -170,7 +170,7 @@ export default function TopBar() {
   }
 
   return (
-    <div className="flex border-b w-full py-[7px] px-5">
+    <div className="flex border-b w-full py-[7px] px-5 sticky top-0 bg-white">
       {renderLeft()}
       {renderToolbar()}
     </div>
