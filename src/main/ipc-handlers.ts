@@ -1,4 +1,4 @@
-import { ipcMain, ipcRenderer } from 'electron';
+import { ipcMain } from 'electron';
 import express from 'express';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { isValidJson } from './util';
@@ -29,7 +29,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       console.log(`server running at port ${port} has been stopped.`);
 
       event.reply('stop-server', { server });
-      // ipcRenderer.send('start-server', { server });
+      ipcMain.emit('start-server', event, server);
     });
   });
 

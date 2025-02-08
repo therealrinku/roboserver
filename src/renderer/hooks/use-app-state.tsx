@@ -32,6 +32,11 @@ export default function useAppState() {
       endpoint,
     ];
     setServers(copiedServers);
+
+    window.electron.ipcRenderer.sendMessage(
+      'restart-server',
+      {...copiedServers[serverIndex]},
+    );
   }
 
   function editEndpoint(serverId: number, updatedEndpoint: IEndpoint) {
@@ -56,6 +61,11 @@ export default function useAppState() {
       serverIndex
     ].endpoints.filter((endpt) => endpt.id !== endpointId);
     setServers(copiedServers);
+
+    window.electron.ipcRenderer.sendMessage(
+      'restart-server',
+      {...copiedServers[serverIndex]},
+    );
   }
 
   function startServer(server: IServer) {
