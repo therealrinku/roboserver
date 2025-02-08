@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import express from 'express';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { isValidJson } from './util';
+import { IServer } from '../renderer/global';
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   const expressServers: Record<
@@ -11,7 +12,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
   //do better implmentation later maybe?
   ipcMain.on('restart-server', (event, server) => {
-    const { port } = server;
+    const { port } = server as IServer;
 
     if (!expressServers[port]) {
       return;
@@ -34,7 +35,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   });
 
   ipcMain.on('start-server', (event, server) => {
-    const { port, endpoints } = server;
+    const { port, endpoints } = server as IServer;
 
     if (!port) {
       event.reply('error-happended', {
@@ -56,8 +57,8 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
     app.get('/', (req, res) => {
       const routeDivs = endpoints
+        .filter((endpoint) => endpoint.isActive)
         .map(
-          //@ts-expect-error FIXME
           (endpoint) => `
       <a  class="flex justify-center py-[12px] bg-gray-200 w-[85vw] max-w-[300px]" href="http://localhost:${server.port}${endpoint.route}">${endpoint.route}</p>
     </a>
@@ -90,6 +91,9 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     });
 
     for (let endpoint of endpoints) {
+      if (!endpoint.isActive) {
+        continue;
+      }
       //@ts-expect-error FIXME
       app[endpoint.type](endpoint.route, (req, res) => {
         const isJson = isValidJson(endpoint.response);
@@ -126,7 +130,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   });
 
   ipcMain.on('stop-server', (event, server) => {
-    const { port } = server;
+    const { port } = server as IServer;
 
     if (!expressServers[port]) {
       event.reply('error-happened', {
@@ -136,7 +140,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       return;
     }
 
-    expressServers[port]?.close((err) => {
+    expressServers[port].close((err) => {
       if (err) {
         event.reply('error-happened', {
           message: `Failed to stop the server on port ${server.port}.`,
