@@ -31,7 +31,7 @@ function EndpointsList() {
   }
 
   return (
-    <div className="w-full px-5">
+    <div className="w-full px-5 pb-5">
       {endpoints.length === 0 && (
         <EmptyState
           iconComponent={<FiDisc size={20} />}

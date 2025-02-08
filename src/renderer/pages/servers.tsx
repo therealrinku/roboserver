@@ -19,7 +19,7 @@ function ServerList() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full px-5">
+    <div className="w-full px-5 pb-5">
       {servers.length === 0 && (
         <EmptyState
           iconComponent={<FiZapOff size={20} />}

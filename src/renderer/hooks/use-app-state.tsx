@@ -4,7 +4,6 @@ import { IEndpoint, IServer } from '../global';
 
 export default function useAppState() {
   const { servers, setServers } = useContext(RootContext);
-
   function addNewServer(server: IServer) {
     //@ts-expect-error
     setServers((prev) => [...prev, server]);
