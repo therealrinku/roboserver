@@ -1,3 +1,8 @@
+export interface IHeader {
+  key: string;
+  value: string;
+}
+
 export interface IServer {
   id: number;
   name: string;
@@ -5,6 +10,7 @@ export interface IServer {
   isRunning: boolean;
   isLoading: boolean;
   endpoints: Array<IEndpoint>;
+  headers: Array<IHeader>;
 }
 
 export interface IEndpoint {
@@ -14,4 +20,5 @@ export interface IEndpoint {
   responseCode: string;
   response: string;
   isActive: boolean;
+  headers: Array<IHeader>;
 }

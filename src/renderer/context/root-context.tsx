@@ -24,12 +24,14 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     port: 3000,
     isRunning: false,
     isLoading: false,
+    headers: [],
     endpoints: [
       {
         id: 1,
         type: 'get',
         route: '/users',
         responseCode: '200',
+        headers: [],
         response: JSON.stringify({
           data: [
             { id: 1, name: 'Tony Hanks' },

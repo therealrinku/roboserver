@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useAppState from '../hooks/use-app-state';
 import { useNavigate } from 'react-router-dom';
-import type { IEndpoint } from '../global';
+import type { IEndpoint, IHeader } from '../global';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 
@@ -15,12 +15,14 @@ export default function EndpointForm({
   initialState?: IEndpoint;
 }) {
   const navigate = useNavigate();
+  const { addNewEndpoint, editEndpoint, servers } = useAppState();
 
   const [type, setType] = useState('get');
   const [route, setRoute] = useState('');
   const [response, setResponse] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [responseCode, setResponseCode] = useState('200');
+  const [headers, setHeaders] = useState<IHeader[]>([{ key: '', value: '' }]);
 
   useEffect(() => {
     if (initialState && isEditMode) {
@@ -29,10 +31,23 @@ export default function EndpointForm({
       setRoute(initialState.route);
       setResponseCode(initialState.responseCode);
       setType(initialState.type);
+      if (initialState.headers.length > 0) {
+        setHeaders(initialState.headers);
+      }
     }
   }, [initialState, isEditMode]);
 
-  const { addNewEndpoint, editEndpoint, servers } = useAppState();
+  function handleChangeHeader(
+    type: 'key' | 'value',
+    idx: number,
+    value: string,
+  ) {
+    setHeaders((prev) => {
+      const copiedHeaders = [...prev];
+      copiedHeaders[idx] = { ...copiedHeaders[idx], [type]: value };
+      return copiedHeaders;
+    });
+  }
 
   function handleAddNewEndpoint() {
     if (!route.trim()) {
@@ -58,6 +73,7 @@ export default function EndpointForm({
       response,
       isActive,
       responseCode,
+      headers,
     };
 
     if (isEditMode) {
@@ -140,6 +156,37 @@ export default function EndpointForm({
           checked={isActive}
           onChange={() => setIsActive((prev) => !prev)}
         />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="serverPort">
+          Headers
+        </label>
+
+        {headers.map((header, idx) => {
+          return (
+            <div className="flex items-center gap-5" key={header.key}>
+              <input
+                name="headerKey"
+                type="text"
+                className="bg-gray-200 w-full p-2 outline-none"
+                placeholder="Key"
+                value={header.key}
+                onChange={(e) => handleChangeHeader('key', idx, e.target.value)}
+              />
+              <input
+                name="headerValue"
+                type="text"
+                placeholder="Value"
+                className="bg-gray-200 w-full p-2 outline-none"
+                value={header.value}
+                onChange={(e) =>
+                  handleChangeHeader('value', idx, e.target.value)
+                }
+              />
+            </div>
+          );
+        })}
       </div>
 
       <button

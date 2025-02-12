@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useAppState from '../hooks/use-app-state';
 import { useNavigate } from 'react-router-dom';
-import type { IServer } from '../global';
+import type { IHeader, IServer } from '../global';
 
 export default function ServerForm({
   isEditMode = false,
@@ -15,13 +15,29 @@ export default function ServerForm({
 
   const [name, setName] = useState('');
   const [port, setPort] = useState('');
+  const [headers, setHeaders] = useState<IHeader[]>([{ key: '', value: '' }]);
 
   useEffect(() => {
     if (isEditMode && initialState) {
       setName(initialState.name);
       setPort(initialState.port.toString());
+      if (initialState.headers.length > 0) {
+        setHeaders(initialState.headers);
+      }
     }
   }, [isEditMode, initialState]);
+
+  function handleChangeHeader(
+    type: 'key' | 'value',
+    idx: number,
+    value: string,
+  ) {
+    setHeaders((prev) => {
+      const copiedHeaders = [...prev];
+      copiedHeaders[idx] = { ...copiedHeaders[idx], [type]: value };
+      return copiedHeaders;
+    });
+  }
 
   function handleAddNewServer() {
     if (name.trim() === '' || port.trim() === '') {
@@ -40,6 +56,7 @@ export default function ServerForm({
       port: Number(port),
       isRunning: false,
       isLoading: false,
+      headers: headers,
       endpoints: isEditMode && initialState ? initialState.endpoints : [],
     };
 
@@ -77,6 +94,37 @@ export default function ServerForm({
           value={port}
           onChange={(e) => setPort(e.target.value)}
         />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="serverPort">
+          Headers
+        </label>
+
+        {headers.map((header, idx) => {
+          return (
+            <div className="flex items-center gap-5" key={header.key}>
+              <input
+                name="headerKey"
+                type="text"
+                className="bg-gray-200 w-full p-2 outline-none"
+                placeholder="Key"
+                value={header.key}
+                onChange={(e) => handleChangeHeader('key', idx, e.target.value)}
+              />
+              <input
+                name="headerValue"
+                type="text"
+                placeholder="Value"
+                className="bg-gray-200 w-full p-2 outline-none"
+                value={header.value}
+                onChange={(e) =>
+                  handleChangeHeader('value', idx, e.target.value)
+                }
+              />
+            </div>
+          );
+        })}
       </div>
 
       <button
