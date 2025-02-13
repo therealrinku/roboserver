@@ -35,7 +35,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   });
 
   ipcMain.on('start-server', (event, server) => {
-    const { port, endpoints } = server as IServer;
+    const { port, endpoints, headers: serverHeaders } = server as IServer;
 
     if (!port) {
       event.reply('error-happended', {
@@ -66,6 +66,14 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       }
       //@ts-expect-error FIXME
       app[endpoint.type](endpoint.route, (req, res) => {
+        for (const serverHeader of serverHeaders) {
+          res.set(serverHeader.key, serverHeader.value);
+        }
+
+        for (const endpointHeader of endpoint.headers) {
+          res.set(endpointHeader.key, endpointHeader.value);
+        }
+
         const isJson = isValidJson(endpoint.response);
         if (isJson) {
           res.status(endpoint.responseCode).json(JSON.parse(endpoint.response));
