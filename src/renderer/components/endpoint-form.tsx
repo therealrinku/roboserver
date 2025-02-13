@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import type { IEndpoint, IHeader } from '../global';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
+import { FiTrash2 } from 'react-icons/fi';
 
 export default function EndpointForm({
   serverId,
@@ -37,6 +38,10 @@ export default function EndpointForm({
     }
   }, [initialState, isEditMode]);
 
+  function handleAddNewHeader() {
+    setHeaders((prev) => [...prev, { key: '', value: '' }]);
+  }
+
   function handleChangeHeader(
     type: 'key' | 'value',
     idx: number,
@@ -46,6 +51,15 @@ export default function EndpointForm({
       const copiedHeaders = [...prev];
       copiedHeaders[idx] = { ...copiedHeaders[idx], [type]: value };
       return copiedHeaders;
+    });
+  }
+
+  function handleDeleteHeader(idx: number) {
+    setHeaders((prev) => {
+      if (prev.length === 1) {
+        return [{ key: '', value: '' }];
+      }
+      return prev.filter((_, headerIdx) => headerIdx !== idx);
     });
   }
 
@@ -146,26 +160,16 @@ export default function EndpointForm({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="isActive">
-          Active
-        </label>
-        <input
-          type="checkbox"
-          name="response"
-          className="bg-gray-200 self-start p-2 outline-none"
-          checked={isActive}
-          onChange={() => setIsActive((prev) => !prev)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="serverPort">
-          Headers
-        </label>
+        <div className="flex items-center gap-2">
+          <label className="font-bold">Headers</label>
+          <button className="font-normal" onClick={handleAddNewHeader}>
+            Add New
+          </button>
+        </div>
 
         {headers.map((header, idx) => {
           return (
-            <div className="flex items-center gap-5" key={header.key}>
+            <div className="flex items-center gap-5" key={idx}>
               <input
                 name="headerKey"
                 type="text"
@@ -184,9 +188,25 @@ export default function EndpointForm({
                   handleChangeHeader('value', idx, e.target.value)
                 }
               />
+              <button onClick={() => handleDeleteHeader(idx)}>
+                <FiTrash2 size={15} color="red" />
+              </button>
             </div>
           );
         })}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="isActive">
+          Active
+        </label>
+        <input
+          type="checkbox"
+          name="response"
+          className="bg-gray-200 self-start p-2 outline-none"
+          checked={isActive}
+          onChange={() => setIsActive((prev) => !prev)}
+        />
       </div>
 
       <button

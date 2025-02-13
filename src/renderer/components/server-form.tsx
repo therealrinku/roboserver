@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import useAppState from '../hooks/use-app-state';
 import { useNavigate } from 'react-router-dom';
 import type { IHeader, IServer } from '../global';
+import { FiTrash2 } from 'react-icons/fi';
 
 export default function ServerForm({
   isEditMode = false,
@@ -27,6 +28,10 @@ export default function ServerForm({
     }
   }, [isEditMode, initialState]);
 
+  function handleAddNewHeader() {
+    setHeaders((prev) => [...prev, { key: '', value: '' }]);
+  }
+
   function handleChangeHeader(
     type: 'key' | 'value',
     idx: number,
@@ -36,6 +41,15 @@ export default function ServerForm({
       const copiedHeaders = [...prev];
       copiedHeaders[idx] = { ...copiedHeaders[idx], [type]: value };
       return copiedHeaders;
+    });
+  }
+
+  function handleDeleteHeader(idx: number) {
+    setHeaders((prev) => {
+      if (prev.length === 1) {
+        return [{ key: '', value: '' }];
+      }
+      return prev.filter((_, headerIdx) => headerIdx !== idx);
     });
   }
 
@@ -97,13 +111,16 @@ export default function ServerForm({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="serverPort">
-          Headers
-        </label>
+        <div className="flex items-center gap-2">
+          <label className="font-bold">Headers</label>
+          <button className="font-normal" onClick={handleAddNewHeader}>
+            Add New
+          </button>
+        </div>
 
         {headers.map((header, idx) => {
           return (
-            <div className="flex items-center gap-5" key={header.key}>
+            <div className="flex items-center gap-5" key={idx}>
               <input
                 name="headerKey"
                 type="text"
@@ -122,6 +139,9 @@ export default function ServerForm({
                   handleChangeHeader('value', idx, e.target.value)
                 }
               />
+              <button onClick={() => handleDeleteHeader(idx)}>
+                <FiTrash2 size={15} color="red" />
+              </button>
             </div>
           );
         })}
