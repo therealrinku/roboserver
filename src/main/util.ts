@@ -30,7 +30,7 @@ export function generateExpressServerHomepageHtml(server: IServer) {
     .map(
       (endpoint) => `
       <a 
-        class="flex items-center gap-2 py-[7px] hover:underline bg-gray-100 pl-2 w-[85vw] max-w-[500px]" href="http://localhost:${server.port}${endpoint.route}"
+        class="${endpoint.type !== 'get' && 'pointer-events-none'} flex items-center gap-2 py-[7px] hover:underline bg-gray-100 pl-2 w-[85vw] max-w-[500px]" href="http://localhost:${server.port}${endpoint.route}"
       >
       <p class="font-bold bg-gray-500 p-1 text-white">${endpoint.type}</p>
       <p>${endpoint.route}</p>
