@@ -67,10 +67,16 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       //@ts-expect-error FIXME
       app[endpoint.type](endpoint.route, (req, res) => {
         for (const serverHeader of serverHeaders) {
+          if (!serverHeader.key.trim() || !serverHeader.value.trim()) {
+            continue;
+          }
           res.set(serverHeader.key, serverHeader.value);
         }
 
         for (const endpointHeader of endpoint.headers) {
+          if (!endpointHeader.key.trim() || !endpointHeader.value.trim()) {
+            continue;
+          }
           res.set(endpointHeader.key, endpointHeader.value);
         }
 
