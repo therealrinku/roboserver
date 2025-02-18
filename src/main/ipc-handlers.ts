@@ -1,10 +1,97 @@
-import { ipcMain } from 'electron';
+import { ipcMain, app } from 'electron';
+import { readDirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
+import path from 'path';
 import express from 'express';
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import { generateExpressServerHomepageHtml, isValidJson } from './util';
+import {
+  generateExpressServerHomepageHtml,
+  isValidJson,
+  isValidServerJson,
+} from './util';
 import { IServer } from '../renderer/global';
 
-export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
+export function registerFsIpcHandlers(
+  mainWindow: Electron.BrowserWindow | null,
+) {
+  const rootFolderPath = app.getPath('documents');
+
+  ipcMain.on('fs-load-servers', async (event) => {
+    try {
+      const files = await readDirSync(rootFolderPath, { withFileTypes: true });
+      const jsonFiles = files.filter((file) => file.endsWith('.json'));
+
+      const validServers = [];
+      for (const filePath of jsonFiles) {
+        const fileContent = await readFileSync(filePath, 'utf-8');
+        const isValid = isValidServerJson(fileContent);
+        if (isValid) {
+          validServers.push(JSON.parse(fileContent));
+        }
+      }
+
+      event.reply('fs-load-servers', validServers);
+    } catch (err) {}
+  });
+
+  ipcMain.on('fs-add-server', async (event, args) => {
+    try {
+      const server = args as IServer;
+      const serverFilePath = path.join(rootFolderPath, `${server.name}.json`);
+      await writeFileSync(serverFilePath, JSON.stringify(server));
+
+      event.reply('fs-add-server', { success: true });
+    } catch (err) {
+      event.reply('error-happened', {
+        message: 'Something went wrong while saving the server file.',
+      });
+    }
+  });
+
+  ipcMain.on('fs-delete-server', async (event, args) => {
+    try {
+      const server = args as IServer;
+      const serverFilePath = path.join(rootFolderPath, `${server.name}.json`);
+
+      await unlinkSync(serverFilePath);
+      event.reply('fs-delete-server', { success: true });
+    } catch (err) {
+      event.reply('error-happened', {
+        message: 'Something went wrong while deleting the server file.',
+      });
+    }
+  });
+
+  ipcMain.on('fs-update-server', async (event, args) => {
+    try {
+      const oldServer = args.oldServer as IServer;
+      const newServer = args.newServer as IServer;
+
+      const oldServerFilePath = path.join(
+        rootFolderPath,
+        `${oldServer.name}.json`,
+      );
+      const newServerFilePath = path.join(
+        rootFolderPath,
+        `${newServerPath.name}.json`,
+      );
+
+      if (oldServerFilePath !== newServerFilePath) {
+        await unlinkSync(oldServerFilePath);
+      }
+      await writeFileSync(newServerFilePath, JSON.stringify(newServer));
+
+      event.reply('fs-update-server', { success: true });
+    } catch (err) {
+      event.reply('error-happened', {
+        message: 'Something went wrong while updating the server file.',
+      });
+    }
+  });
+}
+
+export function registerServerIpcHandlers(
+  mainWindow: Electron.BrowserWindow | null,
+) {
   const expressServers: Record<
     string, //port number string
     Server<typeof IncomingMessage, typeof ServerResponse>

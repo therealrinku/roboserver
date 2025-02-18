@@ -3,6 +3,52 @@ import { URL } from 'url';
 import path from 'path';
 import { IServer } from '../renderer/global';
 
+export function isValidServerJson(fileContent: string) {
+  try {
+    const server = JSON.parse(fileContent) as IServer;
+
+    if (
+      !server.id ||
+      !server.port ||
+      !server.name ||
+      !server.isLoading ||
+      !server.isRunning ||
+      !server.endpoints ||
+      !server.headers
+    ) {
+      return false;
+    }
+
+    if (server.endpoints.length > 0) {
+      for (const endpoint of server.endpoints) {
+        if (
+          !endpoint.id ||
+          !endpoint.type ||
+          !endpoint.route ||
+          !endpoint.responseCode ||
+          !endpoint.response ||
+          !endpoint.isActive ||
+          !endpoint.headers
+        ) {
+          return false;
+        }
+      }
+    }
+
+    if (server.headers.length > 0) {
+      for (const header of server.headers) {
+        if (!header.key || !header.value) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 1212;

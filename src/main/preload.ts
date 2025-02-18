@@ -5,7 +5,11 @@ export type Channels =
   | 'start-server'
   | 'stop-server'
   | 'restart-server'
-  | 'error-happened';
+  | 'error-happened'
+  | 'fs-load-servers'
+  | 'fs-add-server'
+  | 'fs-update-server'
+  | 'fs-delete-server'
 
 const electronHandler = {
   ipcRenderer: {
