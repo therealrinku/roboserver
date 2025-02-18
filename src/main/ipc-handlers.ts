@@ -15,14 +15,14 @@ export function registerFsIpcHandlers(
 ) {
   const rootFolderPath = app.getPath('documents');
 
-  ipcMain.on('fs-load-servers', async (event) => {
+  ipcMain.on('fs-load-servers', (event) => {
     try {
-      const files = await readDirSync(rootFolderPath, { withFileTypes: true });
+      const files = readDirSync(rootFolderPath, { withFileTypes: true });
       const jsonFiles = files.filter((file) => file.endsWith('.json'));
 
       const validServers = [];
       for (const filePath of jsonFiles) {
-        const fileContent = await readFileSync(filePath, 'utf-8');
+        const fileContent = readFileSync(filePath, 'utf-8');
         const isValid = isValidServerJson(fileContent);
         if (isValid) {
           validServers.push(JSON.parse(fileContent));
@@ -33,11 +33,18 @@ export function registerFsIpcHandlers(
     } catch (err) {}
   });
 
-  ipcMain.on('fs-add-server', async (event, args) => {
+  ipcMain.on('fs-add-server', (event, args) => {
     try {
       const server = args as IServer;
       const serverFilePath = path.join(rootFolderPath, `${server.name}.json`);
-      await writeFileSync(serverFilePath, JSON.stringify(server));
+
+      if (existsSync(serverFilePath)) {
+        return event.reply('error-happened', {
+          message: 'Server with same name already exists.',
+        });
+      }
+
+      writeFileSync(serverFilePath, JSON.stringify(server));
 
       event.reply('fs-add-server', { success: true });
     } catch (err) {
@@ -47,12 +54,12 @@ export function registerFsIpcHandlers(
     }
   });
 
-  ipcMain.on('fs-delete-server', async (event, args) => {
+  ipcMain.on('fs-delete-server', (event, args) => {
     try {
       const server = args as IServer;
       const serverFilePath = path.join(rootFolderPath, `${server.name}.json`);
 
-      await unlinkSync(serverFilePath);
+      unlinkSync(serverFilePath);
       event.reply('fs-delete-server', { success: true });
     } catch (err) {
       event.reply('error-happened', {
@@ -61,7 +68,7 @@ export function registerFsIpcHandlers(
     }
   });
 
-  ipcMain.on('fs-update-server', async (event, args) => {
+  ipcMain.on('fs-update-server', (event, args) => {
     try {
       const oldServer = args.oldServer as IServer;
       const newServer = args.newServer as IServer;
@@ -75,10 +82,16 @@ export function registerFsIpcHandlers(
         `${newServerPath.name}.json`,
       );
 
-      if (oldServerFilePath !== newServerFilePath) {
-        await unlinkSync(oldServerFilePath);
+      if (existsSync(newServerFilePath)) {
+        return event.reply('error-happened', {
+          message: 'Server with same name already exists.',
+        });
       }
-      await writeFileSync(newServerFilePath, JSON.stringify(newServer));
+
+      if (oldServerFilePath !== newServerFilePath) {
+        unlinkSync(oldServerFilePath);
+      }
+      writeFileSync(newServerFilePath, JSON.stringify(newServer));
 
       event.reply('fs-update-server', { success: true });
     } catch (err) {
