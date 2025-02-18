@@ -42,9 +42,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
         return copiedServers;
       });
     });
-  }, []);
 
-  useEffect(() => {
     window.electron.ipcRenderer.on('start-server', (args) => {
       //@ts-expect-error FIXME
       const { server } = args;
@@ -72,7 +70,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
         return copiedServers;
       });
     });
-  }, [servers]);
+  }, []);
 
   return (
     <RootContext.Provider value={{ servers, setServers }}>
