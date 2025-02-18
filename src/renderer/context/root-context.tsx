@@ -18,31 +18,7 @@ export const RootContext = createContext<IRootContext>({
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
-  const demoServer: IServer = {
-    id: 1,
-    name: 'demo server',
-    port: 3000,
-    isRunning: false,
-    isLoading: false,
-    headers: [],
-    endpoints: [
-      {
-        id: 1,
-        type: 'get',
-        route: '/users',
-        responseCode: '200',
-        headers: [],
-        response: JSON.stringify({
-          data: [
-            { id: 1, name: 'Tony Hanks' },
-            { id: 2, name: 'Jason Bobs' },
-          ],
-        }),
-        isActive: true,
-      },
-    ],
-  };
-  const [servers, setServers] = useState<IServer[]>([demoServer]);
+  const [servers, setServers] = useState<IServer[]>([]);
 
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage('fetch-app-servers');
