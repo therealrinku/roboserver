@@ -1,7 +1,7 @@
 <div align="center">
     <img src="https://cdn-icons-png.flaticon.com/128/2279/2279212.png" alt="Logo" width="80" height="80">
-    <h3>initiate</h3>
-    <p>initiate your frontend development with initiate</p>
+    <h3>roboserver</h3>
+    <p>initiate your frontend development with roboserver</p>
 </div>
 
 ## Features
@@ -24,7 +24,7 @@ To run this project locally, follow these steps:
 
 1. Clone the repository.
    ```bash
-   git clone https://github.com/therealrinku/initiate.git
+   git clone https://github.com/therealrinku/roboserver.git
 
 2. Install the dependencies.
    ```bash

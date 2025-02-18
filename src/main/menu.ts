@@ -157,7 +157,7 @@ export default class MenuBuilder {
         {
           label: 'View Source Code',
           click() {
-            shell.openExternal('https://github.com/therealrinku/initiate');
+            shell.openExternal('https://github.com/therealrinku/roboserver');
           },
         },
       ],

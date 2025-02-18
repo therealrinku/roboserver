@@ -1,5 +1,5 @@
 {
-  "description": "initiate your frontend development with initiate",
+  "description": "initiate your frontend development with roboserver",
   "keywords": [
     "electron",
     "boilerplate",
@@ -164,8 +164,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "initiate",
-    "appId": "org.erb.initiate",
+    "productName": "roboserver",
+    "appId": "org.erb.roboserver",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -225,7 +225,7 @@
     "publish": {
       "provider": "github",
       "owner": "Rinku Chaudhari",
-      "repo": "initiate"
+      "repo": "roboserver"
     }
   },
   "collective": {},

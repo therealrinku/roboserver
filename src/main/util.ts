@@ -42,15 +42,15 @@ export function generateExpressServerHomepageHtml(server: IServer) {
   const html = `
         <html>
           <head>    
-             <title>Initiate</title>
+             <title>roboserver</title>
              <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
           </head>
 
           <body>
              <div class="flex flex-col gap-2 items-center justify-center h-screen w-screen text-xs">
              <div class="fixed left-5 bottom-5 flex items-center gap-2">
-                <p class="font-bold">initiate v0.0.0</p>
-                <a class="hover:underline" href="https://github.com/therealrinku/initiate.git" target="_blank">Github</a>
+                <p class="font-bold">roboserver v0.0.1</p>
+                <a class="hover:underline" href="https://github.com/therealrinku/roboserver.git" target="_blank">Github</a>
              </div>
 
                 <div class="flex flex-col gap-2 mt-5 ${endpoints.length === 0 && 'hidden'}">
