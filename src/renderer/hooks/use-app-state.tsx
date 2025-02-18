@@ -60,14 +60,14 @@ export default function useAppState() {
 
     window.electron.ipcRenderer.on('fs-update-server', () => {
       setServers(copiedServers);
+      window.electron.ipcRenderer.sendMessage('restart-server', {
+        ...copiedServers[serverIndex],
+      });
     });
 
     window.electron.ipcRenderer.sendMessage('fs-update-server', {
       oldServer,
       newServer,
-    });
-    window.electron.ipcRenderer.sendMessage('restart-server', {
-      ...copiedServers[serverIndex],
     });
   }
 
@@ -84,15 +84,14 @@ export default function useAppState() {
 
     window.electron.ipcRenderer.on('fs-update-server', () => {
       setServers(copiedServers);
+      window.electron.ipcRenderer.sendMessage('restart-server', {
+        ...copiedServers[serverIndex],
+      });
     });
 
     window.electron.ipcRenderer.sendMessage('fs-update-server', {
       oldServer,
       newServer,
-    });
-
-    window.electron.ipcRenderer.sendMessage('restart-server', {
-      ...copiedServers[serverIndex],
     });
   }
 
@@ -108,14 +107,14 @@ export default function useAppState() {
 
     window.electron.ipcRenderer.on('fs-update-server', () => {
       setServers(copiedServers);
+      window.electron.ipcRenderer.sendMessage('restart-server', {
+        ...copiedServers[serverIndex],
+      });
     });
 
     window.electron.ipcRenderer.sendMessage('fs-update-server', {
       oldServer,
       newServer,
-    });
-    window.electron.ipcRenderer.sendMessage('restart-server', {
-      ...copiedServers[serverIndex],
     });
   }
 
