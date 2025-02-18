@@ -6,11 +6,11 @@
 
 ## Features
 
-✨ Minimalistic and simple local rest api to iterate your frontend developement asap
+✨ Spin up local rest api servers to quickstart your frontend development in seconds
 
 ✨ Just swap the base url once real backend endpoint is ready
 
-✨ Local only, can be used from anywhere aka no internet needed 🔥
+✨ Local only, can be used without internet
 
 ## Technologies Used
 <img src="https://img.shields.io/badge/electron-000000?style=for-the-badge&logo=electron&logoColor=white"/>
