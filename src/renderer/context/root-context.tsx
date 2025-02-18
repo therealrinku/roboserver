@@ -46,7 +46,9 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage('fetch-app-servers');
-    window.electron.ipcRenderer.on('fetch-app-servers', (args) => {
+    window.electron.ipcRenderer.sendMessage('fs-load-servers');
+
+    window.electron.ipcRenderer.on('fs-load-servers', (args) => {
       setServers(args as IServer[]);
     });
 

@@ -7,6 +7,8 @@ export default function useAppState() {
   function addNewServer(server: IServer) {
     //@ts-expect-error
     setServers((prev) => [...prev, server]);
+
+    window.electron.ipcRenderer.sendMessage('fs-add-server', server);
   }
 
   function editServer(updatedServer: IServer) {
@@ -14,28 +16,47 @@ export default function useAppState() {
     const serverIndex = copiedServers.findIndex(
       (srvr) => srvr.id === updatedServer.id,
     );
+
+    const oldServer = copiedServers[serverIndex];
     copiedServers[serverIndex] = updatedServer;
+    const newServer = copiedServers[serverIndex];
     setServers(copiedServers);
+
+    window.electron.ipcRenderer.sendMessage('fs-update-server', {
+      oldServer,
+      newServer,
+    });
   }
 
   function deleteServer(serverId: number) {
     //@ts-expect-error
+    const serverIdx = servers.findIndex((server) => server.id === serverId);
+    window.electron.ipcRenderer.sendMessage(
+      'fs-delete-server',
+      servers[serverIdx],
+    );
     setServers((prev) => prev.filter((server) => server.id !== serverId));
   }
 
   function addNewEndpoint(serverId: number, endpoint: IEndpoint) {
     const copiedServers = [...servers];
     const serverIndex = copiedServers.findIndex((srvr) => srvr.id === serverId);
+
+    const oldServer = copiedServers[serverIndex];
     copiedServers[serverIndex].endpoints = [
       ...copiedServers[serverIndex].endpoints,
       endpoint,
     ];
+    const newServer = copiedServers[serverIndex];
     setServers(copiedServers);
 
-    window.electron.ipcRenderer.sendMessage(
-      'restart-server',
-      {...copiedServers[serverIndex]},
-    );
+    window.electron.ipcRenderer.sendMessage('fs-update-server', {
+      oldServer,
+      newServer,
+    });
+    window.electron.ipcRenderer.sendMessage('restart-server', {
+      ...copiedServers[serverIndex],
+    });
   }
 
   function editEndpoint(serverId: number, updatedEndpoint: IEndpoint) {
@@ -44,27 +65,40 @@ export default function useAppState() {
     const endpointIndex = copiedServers[serverIndex].endpoints.findIndex(
       (endpt) => endpt.id === updatedEndpoint.id,
     );
+
+    const oldServer = copiedServers[serverIndex];
     copiedServers[serverIndex].endpoints[endpointIndex] = updatedEndpoint;
+    const newServer = copiedServers[serverIndex];
     setServers(copiedServers);
 
-    window.electron.ipcRenderer.sendMessage(
-      'restart-server',
-      {...copiedServers[serverIndex]},
-    );
+    window.electron.ipcRenderer.sendMessage('fs-update-server', {
+      oldServer,
+      newServer,
+    });
+
+    window.electron.ipcRenderer.sendMessage('restart-server', {
+      ...copiedServers[serverIndex],
+    });
   }
 
   function deleteEndpoint(serverId: number, endpointId: number) {
     const copiedServers = [...servers];
     const serverIndex = copiedServers.findIndex((srvr) => srvr.id === serverId);
+
+    const oldServer = copiedServers[serverIndex];
     copiedServers[serverIndex].endpoints = copiedServers[
       serverIndex
     ].endpoints.filter((endpt) => endpt.id !== endpointId);
+    const newServer = copiedServers[serverIndex];
     setServers(copiedServers);
 
-    window.electron.ipcRenderer.sendMessage(
-      'restart-server',
-      {...copiedServers[serverIndex]},
-    );
+    window.electron.ipcRenderer.sendMessage('fs-update-server', {
+      oldServer,
+      newServer,
+    });
+    window.electron.ipcRenderer.sendMessage('restart-server', {
+      ...copiedServers[serverIndex],
+    });
   }
 
   function startServer(server: IServer) {
