@@ -43,7 +43,7 @@ function ServerList() {
           return (
             <button
               onClick={() => navigate(`/server/${server.id}`)}
-              className="flex items-center gap-2 flex items-center bg-gray-200 w-full py-[12px] px-2"
+              className="flex items-center gap-2 flex items-center bg-gray-200 w-full py-[12px] px-2 hover:bg-gray-300"
               key={server.id}
             >
               <FiZap size={15} /> <b>{server.name}</b>
