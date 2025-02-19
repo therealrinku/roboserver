@@ -1,5 +1,12 @@
 import { ipcMain, app } from 'electron';
-import { readDirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
+import {
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+  unlinkSync,
+  existsSync,
+  mkdirSync,
+} from 'fs';
 import path from 'path';
 import express from 'express';
 import { IncomingMessage, Server, ServerResponse } from 'http';
@@ -13,22 +20,28 @@ import { IServer } from '../renderer/global';
 export function registerFsIpcHandlers(
   mainWindow: Electron.BrowserWindow | null,
 ) {
-  const rootFolderPath = app.getPath('documents');
+  const documentsFolderPath = app.getPath('documents');
+  const rootFolderPath = path.join(documentsFolderPath, 'roboshare');
+
+  if (!existsSync(rootFolderPath)) {
+    mkdirSync(rootFolderPath);
+  }
 
   ipcMain.on('fs-load-servers', (event) => {
     try {
-      const files = readDirSync(rootFolderPath, { withFileTypes: true });
-      const jsonFiles = files.filter((file) => file.endsWith('.json'));
+      const files = readdirSync(rootFolderPath, { withFileTypes: true });
+      const jsonFiles = files.filter((file) => file.name.endsWith('.json'));
 
       const validServers = [];
-      for (const filePath of jsonFiles) {
+
+      for (const file of jsonFiles) {
+        const filePath = path.join(rootFolderPath, file.name);
         const fileContent = readFileSync(filePath, 'utf-8');
         const isValid = isValidServerJson(fileContent);
         if (isValid) {
           validServers.push(JSON.parse(fileContent));
         }
       }
-
       event.reply('fs-load-servers', validServers);
     } catch (err) {}
   });
@@ -79,20 +92,14 @@ export function registerFsIpcHandlers(
       );
       const newServerFilePath = path.join(
         rootFolderPath,
-        `${newServerPath.name}.json`,
+        `${newServer.name}.json`,
       );
-
-      if (existsSync(newServerFilePath)) {
-        return event.reply('error-happened', {
-          message: 'Server with same name already exists.',
-        });
-      }
 
       if (oldServerFilePath !== newServerFilePath) {
         unlinkSync(oldServerFilePath);
       }
-      writeFileSync(newServerFilePath, JSON.stringify(newServer));
 
+      writeFileSync(newServerFilePath, JSON.stringify(newServer));
       event.reply('fs-update-server', { success: true });
     } catch (err) {
       event.reply('error-happened', {

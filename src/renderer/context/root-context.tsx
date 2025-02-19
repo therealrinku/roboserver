@@ -33,6 +33,10 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       const { server, message } = args;
       alert(message || 'Something went wrong');
 
+      if (!server) {
+        return;
+      }
+
       setServers((prevStateOfServers) => {
         const copiedServers = [...prevStateOfServers];
         const serverIndex = copiedServers.findIndex((s) => s.id === server.id);

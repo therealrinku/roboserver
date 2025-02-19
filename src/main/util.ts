@@ -1,26 +1,40 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import path from 'path';
-import { IServer } from '../renderer/global';
+import { IHeader, IServer } from '../renderer/global';
 
 export function isValidServerJson(fileContent: string) {
+  function isHeadersValid(headers: IHeader[]) {
+    if (headers.length === 0) {
+      return true;
+    }
+
+    for (const header of headers) {
+      if (typeof header.key !== 'string' || typeof header.value !== 'string') {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   try {
     const server = JSON.parse(fileContent) as IServer;
-
     if (
       !server.id ||
       !server.port ||
       !server.name ||
-      !server.isLoading ||
-      !server.isRunning ||
-      !server.endpoints ||
-      !server.headers
+      server.isLoading === undefined ||
+      server.isRunning === undefined ||
+      !Array.isArray(server.endpoints) ||
+      !Array.isArray(server.headers)
     ) {
       return false;
     }
 
     if (server.endpoints.length > 0) {
       for (const endpoint of server.endpoints) {
+        const validHeaders = isHeadersValid(endpoint.headers);
         if (
           !endpoint.id ||
           !endpoint.type ||
@@ -28,22 +42,14 @@ export function isValidServerJson(fileContent: string) {
           !endpoint.responseCode ||
           !endpoint.response ||
           !endpoint.isActive ||
-          !endpoint.headers
+          !validHeaders
         ) {
           return false;
         }
       }
     }
 
-    if (server.headers.length > 0) {
-      for (const header of server.headers) {
-        if (!header.key || !header.value) {
-          return false;
-        }
-      }
-    }
-
-    return true;
+    return isHeadersValid(server.headers) && true;
   } catch (err) {
     return false;
   }
