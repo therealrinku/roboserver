@@ -4,8 +4,18 @@ import useAppState from '../hooks/use-app-state';
 import EmptyState from '../components/common/empty-state';
 import TopBar from '../components/common/top-bar';
 import Loading from '../components/common/loading';
+import Loading2 from '../components/common/loading2';
 
 export default function Servers() {
+  const { isAppLoading } = useAppState();
+
+  if (isAppLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen w-screen text-xs gap-2">
+        <Loading2 />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col items-center h-screen w-screen text-xs gap-2">
       <TopBar />

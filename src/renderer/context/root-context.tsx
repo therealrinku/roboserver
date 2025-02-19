@@ -9,15 +9,18 @@ import { IServer } from '../global';
 
 interface IRootContext {
   servers: IServer[];
+  isAppLoading: boolean;
   setServers: Dispatch<IServer[]>;
 }
 
 export const RootContext = createContext<IRootContext>({
+  isAppLoading: false,
   servers: [],
   setServers: () => {},
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
+  const [isAppLoading, setIsAppLoading] = useState<boolean>(true);
   const [servers, setServers] = useState<IServer[]>([]);
 
   useEffect(() => {
@@ -26,6 +29,8 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
     window.electron.ipcRenderer.on('fs-load-servers', (args) => {
       setServers(args as IServer[]);
+      //some delay to show that amazing loader :)
+      setTimeout(() => setIsAppLoading(false), 2000);
     });
 
     window.electron.ipcRenderer.on('error-happened', (args) => {
@@ -77,7 +82,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <RootContext.Provider value={{ servers, setServers }}>
+    <RootContext.Provider value={{ isAppLoading, servers, setServers }}>
       {children}
     </RootContext.Provider>
   );

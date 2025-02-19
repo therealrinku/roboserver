@@ -3,10 +3,11 @@ import { RootContext } from '../context/root-context';
 import { IEndpoint, IServer } from '../global';
 
 export default function useAppState() {
-  const { servers, setServers } = useContext(RootContext);
+  const { isAppLoading, servers, setServers } = useContext(RootContext);
 
   function addNewServer(server: IServer) {
     window.electron.ipcRenderer.on('fs-add-server', () => {
+      //@ts-expect-error
       setServers((prev) => [...prev, server]);
     });
 
@@ -34,10 +35,10 @@ export default function useAppState() {
   }
 
   function deleteServer(serverId: number) {
-    //@ts-expect-error
     const serverIdx = servers.findIndex((server) => server.id === serverId);
 
     window.electron.ipcRenderer.on('fs-delete-server', () => {
+      //@ts-expect-error
       setServers((prev) => prev.filter((server) => server.id !== serverId));
     });
 
@@ -137,6 +138,7 @@ export default function useAppState() {
   }
 
   return {
+    isAppLoading,
     servers,
     addNewServer,
     deleteServer,
