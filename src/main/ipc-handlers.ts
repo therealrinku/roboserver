@@ -32,14 +32,17 @@ export function registerFsIpcHandlers(
       const files = readdirSync(rootFolderPath, { withFileTypes: true });
       const jsonFiles = files.filter((file) => file.name.endsWith('.json'));
 
-      const validServers = [];
+      const validServers: IServer[] = [];
 
       for (const file of jsonFiles) {
         const filePath = path.join(rootFolderPath, file.name);
         const fileContent = readFileSync(filePath, 'utf-8');
         const isValid = isValidServerJson(fileContent);
         if (isValid) {
-          validServers.push(JSON.parse(fileContent));
+          const server = JSON.parse(fileContent) as IServer;
+          server.isRunning = false;
+          server.isLoading = false;
+          validServers.push(server);
         }
       }
       event.reply('fs-load-servers', validServers);
