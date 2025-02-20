@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useAppState from '../hooks/use-app-state';
 import EmptyState from '../components/common/empty-state';
 import TopBar from '../components/common/top-bar';
+import { demoServer } from '../utils/configs';
 
 export default function Server() {
   return (
@@ -17,7 +18,7 @@ function EndpointsList() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const { servers, deleteEndpoint } = useAppState();
+  const { servers, deleteEndpoint, addNewEndpoint } = useAppState();
   const server = servers.find((srvr) => srvr.id === Number(params.server_id));
   const endpoints = server ? server.endpoints : [];
 
@@ -37,6 +38,10 @@ function EndpointsList() {
           iconComponent={<FiDisc size={20} />}
           text="No any endpoints yet."
           description="You can add new right now by clicking + button."
+          buttonText="Add demo endpoint"
+          buttonOnClick={() =>
+            addNewEndpoint(Number(params.server_id), demoServer.endpoints[0])
+          }
         />
       )}
 

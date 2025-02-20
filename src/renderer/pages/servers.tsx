@@ -5,6 +5,7 @@ import EmptyState from '../components/common/empty-state';
 import TopBar from '../components/common/top-bar';
 import Loading from '../components/common/loading';
 import Loading2 from '../components/common/loading2';
+import { demoServer } from '../utils/configs';
 
 export default function Servers() {
   const { isAppLoading } = useAppState();
@@ -25,7 +26,7 @@ export default function Servers() {
 }
 
 function ServerList() {
-  const { servers, startServer, stopServer } = useAppState();
+  const { servers, startServer, stopServer, addNewServer } = useAppState();
   const navigate = useNavigate();
 
   return (
@@ -35,6 +36,8 @@ function ServerList() {
           iconComponent={<FiZapOff size={20} />}
           text="No any servers yet."
           description="You can add new right now by clicking + button."
+          buttonText="Add demo server"
+          buttonOnClick={() => addNewServer(demoServer)}
         />
       )}
 
