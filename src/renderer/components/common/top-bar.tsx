@@ -88,7 +88,7 @@ export default function TopBar() {
             className="disabled:opacity-50"
             onClick={() => {
               const confirmed = confirm(
-                `Are you sure want to delete ${server?.name}`,
+                `Are you sure want to delete ${server?.name}?`,
               );
               if (confirmed && server) {
                 deleteServer(server.id);
