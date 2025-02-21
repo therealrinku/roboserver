@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://cdn-icons-png.flaticon.com/128/2279/2279212.png" alt="Logo" width="80" height="80">
+    <img src="https://cdn-icons-png.flaticon.com/128/2675/2675949.png" alt="Logo" width="80" height="80">
     <h3>roboserver</h3>
     <p>initiate your frontend development with roboserver</p>
 </div>
