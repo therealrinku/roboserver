@@ -34,13 +34,13 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     });
 
     window.electron.ipcRenderer.on('fs-add-server', (args) => {
-      //@ts-expect-error FIXME
+      //@ts-expect-error
       const server = args.server as IServer;
       setServers((prev) => [...prev, server]);
     });
 
     window.electron.ipcRenderer.on('fs-update-server', (args) => {
-      //@ts-expect-error FIXME
+      //@ts-expect-error
       const updatedServer = args.server as IServer;
       const copiedServers = [...servers];
       const serverIndex = copiedServers.findIndex(
@@ -64,7 +64,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     });
 
     window.electron.ipcRenderer.on('fs-delete-server', (args) => {
-      //@ts-expect-error FIXME
+      //@ts-expect-error
       const server = args.server as IServer;
       setServers((prev) => prev.filter((srvr) => srvr.id !== server.id));
     });
@@ -72,7 +72,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     window.electron.ipcRenderer.on('error-happened', (args) => {
-      //@ts-expect-error FIXME
+      //@ts-expect-error
       const { server, message } = args;
       alert(message || 'Something went wrong');
 
@@ -91,7 +91,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     });
 
     window.electron.ipcRenderer.on('start-server', (args) => {
-      //@ts-expect-error FIXME
+      //@ts-expect-error
       const { server } = args;
 
       setServers((prevStateOfServers) => {
@@ -105,7 +105,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     });
 
     window.electron.ipcRenderer.on('stop-server', (args) => {
-      //@ts-expect-error FIXME
+      //@ts-expect-error
       const { server } = args;
 
       setServers((prevStateOfServers) => {
