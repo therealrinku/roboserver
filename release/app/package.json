@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "description": "initiate your frontend development with roboserver",
   "license": "MIT",
-  "author": {
-    "name": "Rinku Chaudhari",
-    "url": "https://github.com/therealrinku"
-  },
+  "author": "Rinku Chaudhari <rinkunited2032@gmail.com>",
   "main": "./dist/main/main.js",
   "scripts": {
     "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
