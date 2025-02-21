@@ -44,7 +44,6 @@ export default function useAppState() {
       endpoint,
     ];
     const newServer = copiedServers[serverIndex];
-
     window.electron.ipcRenderer.sendMessage('fs-update-server', {
       oldServer,
       newServer,

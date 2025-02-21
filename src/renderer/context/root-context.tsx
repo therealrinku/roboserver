@@ -36,7 +36,10 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     window.electron.ipcRenderer.on('fs-add-server', (args) => {
       //@ts-expect-error
       const server = args.server as IServer;
-      setServers((prev) => [...prev, server]);
+      setServers((prev) => {
+        const copiedServers = [...prev];
+        return [...copiedServers, server];
+      });
     });
 
     window.electron.ipcRenderer.on('fs-update-server', (args) => {
@@ -49,6 +52,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
           (srvr) => srvr.id === updatedServer.id,
         );
         copiedServers[serverIndex] = updatedServer;
+        copiedServers[serverIndex].isLoading = true;
 
         window.electron.ipcRenderer.sendMessage('restart-server', {
           ...copiedServers[serverIndex],
