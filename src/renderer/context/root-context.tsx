@@ -23,16 +23,54 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   const [isAppLoading, setIsAppLoading] = useState<boolean>(true);
   const [servers, setServers] = useState<IServer[]>([]);
 
+  //fs-events
   useEffect(() => {
-    window.electron.ipcRenderer.sendMessage('fetch-app-servers');
     window.electron.ipcRenderer.sendMessage('fs-load-servers');
 
     window.electron.ipcRenderer.on('fs-load-servers', (args) => {
       setServers(args as IServer[]);
       //some delay to show that amazing loader :)
-      setTimeout(() => setIsAppLoading(false), 2000);
+      setTimeout(() => setIsAppLoading(false), 1500);
     });
 
+    window.electron.ipcRenderer.on('fs-add-server', (args) => {
+      //@ts-expect-error FIXME
+      const server = args.server as IServer;
+      setServers((prev) => [...prev, server]);
+    });
+
+    window.electron.ipcRenderer.on('fs-update-server', (args) => {
+      //@ts-expect-error FIXME
+      const updatedServer = args.server as IServer;
+      const copiedServers = [...servers];
+      const serverIndex = copiedServers.findIndex(
+        (srvr) => srvr.id === updatedServer.id,
+      );
+
+      setServers((prevStateOfServers) => {
+        const copiedServers = [...prevStateOfServers];
+        const serverIndex = copiedServers.findIndex(
+          (srvr) => srvr.id === updatedServer.id,
+        );
+        copiedServers[serverIndex] = updatedServer;
+        return copiedServers;
+      });
+
+      if (updatedServer.isRunning) {
+        window.electron.ipcRenderer.sendMessage('restart-server', {
+          ...copiedServers[serverIndex],
+        });
+      }
+    });
+
+    window.electron.ipcRenderer.on('fs-delete-server', (args) => {
+      //@ts-expect-error FIXME
+      const server = args.server as IServer;
+      setServers((prev) => prev.filter((srvr) => srvr.id !== server.id));
+    });
+  }, []);
+
+  useEffect(() => {
     window.electron.ipcRenderer.on('error-happened', (args) => {
       //@ts-expect-error FIXME
       const { server, message } = args;

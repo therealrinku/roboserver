@@ -45,6 +45,7 @@ export function registerFsIpcHandlers(
           validServers.push(server);
         }
       }
+
       event.reply('fs-load-servers', validServers);
     } catch (err) {}
   });
@@ -61,8 +62,7 @@ export function registerFsIpcHandlers(
       }
 
       writeFileSync(serverFilePath, JSON.stringify(server));
-
-      event.reply('fs-add-server', { success: true });
+      event.reply('fs-add-server', { server, success: true });
     } catch (err) {
       event.reply('error-happened', {
         message: 'Something went wrong while saving the server file.',
@@ -76,7 +76,7 @@ export function registerFsIpcHandlers(
       const serverFilePath = path.join(rootFolderPath, `${server.name}.json`);
 
       unlinkSync(serverFilePath);
-      event.reply('fs-delete-server', { success: true });
+      event.reply('fs-delete-server', { server, success: true });
     } catch (err) {
       event.reply('error-happened', {
         message: 'Something went wrong while deleting the server file.',
@@ -103,7 +103,7 @@ export function registerFsIpcHandlers(
       }
 
       writeFileSync(newServerFilePath, JSON.stringify(newServer));
-      event.reply('fs-update-server', { success: true });
+      event.reply('fs-update-server', { server: newServer, success: true });
     } catch (err) {
       event.reply('error-happened', {
         message: 'Something went wrong while updating the server file.',

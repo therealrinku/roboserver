@@ -75,6 +75,13 @@ export default function EndpointForm({
     }
 
     const server = servers.find((srvr) => srvr.id === serverId);
+    const tooManyEndpoints = server?.endpoints.length === 200;
+
+    if (tooManyEndpoints) {
+      alert("Please don't add more than 200 endpoints, it could get messy.");
+      return;
+    }
+
     const endpoint: IEndpoint = {
       id:
         isEditMode && initialState

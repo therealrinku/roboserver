@@ -1,7 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels =
-  | 'fetch-app-servers'
   | 'start-server'
   | 'stop-server'
   | 'restart-server'
@@ -9,7 +8,7 @@ export type Channels =
   | 'fs-load-servers'
   | 'fs-add-server'
   | 'fs-update-server'
-  | 'fs-delete-server'
+  | 'fs-delete-server';
 
 const electronHandler = {
   ipcRenderer: {
