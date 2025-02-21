@@ -64,12 +64,6 @@ export default function ServerForm({
       return;
     }
 
-    const serverWithSameNameExists = servers.find((srvr) => srvr.name === name);
-    if (serverWithSameNameExists) {
-      alert('Server with same name already exists.');
-      return;
-    }
-
     const tooManyServers = servers.length === 100;
     if (tooManyServers) {
       alert("Please don't add more than 100 servers, it could get messy.");

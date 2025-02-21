@@ -174,7 +174,7 @@ export function registerServerIpcHandlers(
       if (!endpoint.isActive) {
         continue;
       }
-      //@ts-expect-error 
+      //@ts-expect-error
       app[endpoint.type](endpoint.route, (req, res) => {
         for (const serverHeader of serverHeaders) {
           if (!serverHeader.key.trim() || !serverHeader.value.trim()) {
