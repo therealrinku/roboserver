@@ -41,7 +41,7 @@ export function isValidServerJson(fileContent: string) {
           !endpoint.route ||
           !endpoint.responseCode ||
           !endpoint.response ||
-          !endpoint.isActive ||
+          endpoint.isActive === undefined ||
           !validHeaders
         ) {
           return false;
