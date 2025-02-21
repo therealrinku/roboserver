@@ -3,7 +3,7 @@ import { RootContext } from '../context/root-context';
 import { IEndpoint, IServer } from '../global';
 
 export default function useAppState() {
-  const { isAppLoading, servers } = useContext(RootContext);
+  const { isAppLoading, servers, setServers } = useContext(RootContext);
 
   function addNewServer(server: IServer) {
     window.electron.ipcRenderer.sendMessage('fs-add-server', server);
@@ -85,10 +85,22 @@ export default function useAppState() {
   }
 
   function startServer(server: IServer) {
+    const copiedServers = [...servers];
+    const serverIndex = copiedServers.findIndex(
+      (srvr) => srvr.id === server.id,
+    );
+    copiedServers[serverIndex].isLoading = true;
+    setServers(copiedServers);
     window.electron.ipcRenderer.sendMessage('start-server', { ...server });
   }
 
   function stopServer(server: IServer) {
+    const copiedServers = [...servers];
+    const serverIndex = copiedServers.findIndex(
+      (srvr) => srvr.id === server.id,
+    );
+    copiedServers[serverIndex].isLoading = true;
+    setServers(copiedServers);
     window.electron.ipcRenderer.sendMessage('stop-server', { ...server });
   }
 
