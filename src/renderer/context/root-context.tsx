@@ -52,7 +52,10 @@ export function RootContextProvider({ children }: PropsWithChildren) {
           (srvr) => srvr.id === updatedServer.id,
         );
         copiedServers[serverIndex] = updatedServer;
-        copiedServers[serverIndex].isLoading = true;
+
+        if (copiedServers[serverIndex].isRunning) {
+          copiedServers[serverIndex].isLoading = true;
+        }
 
         window.electron.ipcRenderer.sendMessage('restart-server', {
           ...copiedServers[serverIndex],

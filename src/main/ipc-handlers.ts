@@ -16,6 +16,7 @@ import {
   isValidServerJson,
 } from './util';
 import { IServer } from '../renderer/global';
+import cors from 'cors';
 
 export function registerFsIpcHandlers(
   mainWindow: Electron.BrowserWindow | null,
@@ -156,6 +157,7 @@ export function registerServerIpcHandlers(
     }
 
     const app = express();
+    app.use(cors());
 
     if (expressServers[port]) {
       event.reply('error-happened', {
