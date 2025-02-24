@@ -156,7 +156,7 @@ export default function TopBar() {
     if (isHomepage) {
       return (
         <div className="flex items-center">
-          <b>Servers</b>
+          <b>Servers ({servers.length})</b>
         </div>
       );
     }
@@ -164,7 +164,7 @@ export default function TopBar() {
     return (
       <button className="flex items-center gap-1" onClick={() => navigate(-1)}>
         <FiChevronLeft size={15} />
-        <b>Endpoints</b>
+        <b>Endpoints ({server?.endpoints.length})</b>
       </button>
     );
   }
