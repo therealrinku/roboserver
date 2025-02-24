@@ -60,6 +60,7 @@ function EndpointsList() {
               {!endpoint.isActive && <p className="text-red-500">Inactive</p>}
               <div className="ml-auto flex items-center gap-5">
                 <button
+                  title="Edit endpoint"
                   onClick={() =>
                     navigate(`/edit-endpoint/${server?.id}/${endpoint.id}`)
                   }
@@ -67,6 +68,7 @@ function EndpointsList() {
                   <FiSettings size={15} />
                 </button>
                 <button
+                  title="Delete endpoint"
                   onClick={() =>
                     handleDeleteEndpoint(endpoint.id, endpoint.route)
                   }

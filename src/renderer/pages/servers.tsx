@@ -52,6 +52,7 @@ function ServerList() {
               <FiZap size={15} /> <b>{server.name}</b>
               <p className="text-gray-500">Port {server.port}</p>
               <button
+                title={server.isRunning ? 'Stop Server' : 'Start Server'}
                 data-testid="start-stop-server-button"
                 className="ml-auto flex flex-col items-center justify-center"
                 disabled={server.isLoading}

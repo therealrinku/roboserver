@@ -104,7 +104,7 @@ export default function TopBar() {
             <FiTrash2 size={15} color="red" />
           </button>
           <button
-            title="Server settings"
+            title="Edit server"
             disabled={server?.isLoading || server?.isRunning}
             className="disabled:opacity-50"
             onClick={() => navigate(`/edit-server/${server?.id}`)}
