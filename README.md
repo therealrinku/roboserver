@@ -18,6 +18,8 @@
 <img src="https://img.shields.io/badge/tailwindcss-000000?style=for-the-badge&logo=tailwindcss&logoColor=blue"/>
 <img src="https://img.shields.io/badge/typescript-000000?style=for-the-badge&logo=typescript&logoColor=blue"/>
 
+## Download from here [here](https://github.com/therealrinku/roboserver/releases)
+
 ## Contribute to the Project
 
 To run this project locally, follow these steps:
@@ -36,4 +38,4 @@ To run this project locally, follow these steps:
 
 ## Build and create a package
    ```bash
-   yarn package
+     yarn package
