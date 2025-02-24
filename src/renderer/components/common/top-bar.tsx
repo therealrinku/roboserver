@@ -54,7 +54,10 @@ export default function TopBar() {
     if (isHomepage) {
       return (
         <div className="flex items-center gap-2 ml-auto">
-          <button onClick={() => navigate(`/new-server`)}>
+          <button
+            onClick={() => navigate(`/new-server`)}
+            title="Add new server"
+          >
             <FiPlus size={15} />
           </button>
         </div>
@@ -65,6 +68,7 @@ export default function TopBar() {
       return (
         <div className="flex items-center gap-5 ml-auto">
           <button
+            title={server?.isRunning ? 'Stop server' : 'Start server'}
             className="flex flex-col items-center justify-center"
             disabled={server?.isLoading}
             onClick={() => {
@@ -84,6 +88,7 @@ export default function TopBar() {
             )}
           </button>
           <button
+            title="Delete server"
             disabled={server?.isLoading || server?.isRunning}
             className="disabled:opacity-50"
             onClick={() => {
@@ -99,6 +104,7 @@ export default function TopBar() {
             <FiTrash2 size={15} color="red" />
           </button>
           <button
+            title="Server settings"
             disabled={server?.isLoading || server?.isRunning}
             className="disabled:opacity-50"
             onClick={() => navigate(`/edit-server/${server?.id}`)}
@@ -106,13 +112,17 @@ export default function TopBar() {
             <FiSettings size={15} />
           </button>
           <button
+            title="Open server in browser"
             disabled={!server?.isRunning}
             className="disabled:opacity-50"
             onClick={() => window.open(`http://localhost:${server?.port}`)}
           >
             <FiLink size={15} />
           </button>
-          <button onClick={() => navigate(`/new-endpoint/${server?.id}`)}>
+          <button
+            onClick={() => navigate(`/new-endpoint/${server?.id}`)}
+            title="Add new endpoint"
+          >
             <FiPlus size={15} />
           </button>
         </div>
