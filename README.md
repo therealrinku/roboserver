@@ -36,6 +36,8 @@ To run this project locally, follow these steps:
    ```bash
    yarn start
 
-## Build and create a package
-   ```bash
-     yarn package
+## Build and create a package for your platform
+    yarn package
+
+## Build and create a package for all platforms
+     yarn package-all
