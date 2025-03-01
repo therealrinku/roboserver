@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import type { IEndpoint, IHeader } from '../global';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiInfo, FiTrash2 } from 'react-icons/fi';
 
 export default function EndpointForm({
   serverId,
@@ -154,8 +154,8 @@ export default function EndpointForm({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="response">
-          Response
+        <label className="font-bold flex items-center gap-2" htmlFor="response">
+          Response <FiInfo size={15} title="Response can be text or json." />
         </label>
         <ReactCodeMirror
           extensions={[json()]}
