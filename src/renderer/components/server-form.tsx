@@ -118,7 +118,7 @@ export default function ServerForm({
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <label className="font-bold">Headers</label>
+          <label className="font-bold">Headers ({headers.length})</label>
           <button className="font-normal" onClick={handleAddNewHeader}>
             Add New
           </button>
