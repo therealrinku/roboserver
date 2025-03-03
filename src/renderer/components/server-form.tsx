@@ -100,6 +100,7 @@ export default function ServerForm({
           className="bg-gray-200 w-full p-2 outline-none"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          autoFocus={true}
         />
       </div>
 

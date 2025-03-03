@@ -137,6 +137,7 @@ export default function EndpointForm({
           className="bg-gray-200 w-full p-2 outline-none"
           value={route}
           onChange={(e) => setRoute(e.target.value)}
+          autoFocus={true}
         />
       </div>
 
