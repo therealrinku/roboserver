@@ -12,6 +12,13 @@
 
 ✨ Local only, can be used without internet
 
+## Headshots
+<img width="1436" alt="Screenshot 2025-05-07 at 13 16 20" src="https://github.com/user-attachments/assets/b2aeeb15-58cc-49d4-a9cd-f747606b4f7f" />
+<img width="1311" alt="Screenshot 2025-05-07 at 13 18 43" src="https://github.com/user-attachments/assets/17dcda53-b696-46a9-b44e-4c29acd68cbf" />
+<img width="1311" alt="Screenshot 2025-05-07 at 13 16 48" src="https://github.com/user-attachments/assets/f8015544-c85d-4820-86b6-f6ed26c50e4f" />
+<img width="1311" alt="Screenshot 2025-05-07 at 13 16 58" src="https://github.com/user-attachments/assets/c9c3f3b3-4695-41d8-a135-05c15f8b7b39" />
+
+
 ## Technologies Used
 <img src="https://img.shields.io/badge/electron-000000?style=for-the-badge&logo=electron&logoColor=white"/>
 <img src="https://img.shields.io/badge/react-000000?style=for-the-badge&logo=react&logoColor=blue"/>
