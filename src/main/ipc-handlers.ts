@@ -22,7 +22,7 @@ export function registerFsIpcHandlers(
   mainWindow: Electron.BrowserWindow | null,
 ) {
   const documentsFolderPath = app.getPath('documents');
-  const rootFolderPath = path.join(documentsFolderPath, 'roboshare');
+  const rootFolderPath = path.join(documentsFolderPath, 'roboserver');
 
   if (!existsSync(rootFolderPath)) {
     mkdirSync(rootFolderPath);
