@@ -177,7 +177,7 @@ export function registerServerIpcHandlers(
         continue;
       }
       //@ts-expect-error
-      app[endpoint.type](endpoint.route, (req, res) => {
+      app[endpoint.type](endpoint.route, async (req, res) => {
         for (const serverHeader of serverHeaders) {
           if (!serverHeader.key.trim() || !serverHeader.value.trim()) {
             continue;
@@ -194,27 +194,32 @@ export function registerServerIpcHandlers(
 
         try {
           switch (endpoint.responseType) {
-            case 'html' : {
+            case 'html': {
               res.type("html").status(endpoint.responseCode).send(endpoint.response);
             }
             case 'text': {
               res.type("text").status(endpoint.responseCode).send(endpoint.response)
             }
             case 'json': {
-              if (isValidJson(endpoint.response)) { 
-                res.status(endpoint.responseCode).json(endpoint.response);
+              if (isValidJson(endpoint.response)) {
+                res.status(endpoint.responseCode).json(JSON.parse(endpoint.response));
               } else {
                 res.type("text").status(endpoint.responseCode).send(endpoint.response)
               }
             }
             case 'js': {
-              const resp = eval(endpoint.response);
-              console.log(resp, "poop");
-              // if (isValidJson(resp)) {
-                res.status(endpoint.responseCode).json(resp);
-              // } else {
-              //   res.type("text").status(endpoint.responseCode).send(JSON.stringify(resp));
-              // }
+              const response = eval(endpoint.response);
+
+              let resp = response;
+              if (response instanceof Promise) {
+                resp = await response.then(rsp => rsp).catch(e => e);
+              }
+
+              if (isValidJson(resp)) {
+                res.status(endpoint.responseCode).json(JSON.parse(resp));
+              } else {
+                res.type("text").status(endpoint.responseCode).send(JSON.stringify(resp));
+              }
             }
           }
         } catch (err: any) {

@@ -177,7 +177,7 @@ export default function EndpointForm({
 
       <div className="flex flex-col gap-2">
         <label className="font-bold flex items-center gap-2" htmlFor="response">
-          Response
+          Response ({responseType})
         </label>
         <ReactCodeMirror
           extensions={[json(), javascript()]}
