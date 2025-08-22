@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import type { IEndpoint, IHeader } from '../global';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
-import { FiInfo, FiTrash2 } from 'react-icons/fi';
+import {javascript} from "@codemirror/lang-javascript"
+import { FiTrash2 } from 'react-icons/fi';
 
 export default function EndpointForm({
   serverId,
@@ -23,6 +24,7 @@ export default function EndpointForm({
   const [response, setResponse] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [responseCode, setResponseCode] = useState('200');
+  const [responseType, setResponseType] = useState<Pick<IEndpoint,'responseType'>['responseType']>("text");
   const [headers, setHeaders] = useState<IHeader[]>([{ key: '', value: '' }]);
 
   useEffect(() => {
@@ -31,6 +33,7 @@ export default function EndpointForm({
       setResponse(initialState.response);
       setRoute(initialState.route);
       setResponseCode(initialState.responseCode);
+      setResponseType(initialState.responseType)
       setType(initialState.type);
       if (initialState.headers.length > 0) {
         setHeaders(initialState.headers);
@@ -95,6 +98,7 @@ export default function EndpointForm({
       isActive,
       responseCode,
       headers,
+      responseType
     };
 
     if (isEditMode) {
@@ -155,11 +159,27 @@ export default function EndpointForm({
       </div>
 
       <div className="flex flex-col gap-2">
+        <label className="font-bold" htmlFor="responseType">
+          Response Type
+        </label>
+        <select
+          className="bg-gray-200 w-full p-2 outline-none"
+          value={responseType}
+          //@ts-expect-error
+          onChange={(e) => setResponseType(e.target.value)}
+        >
+          <option value="text">text</option>
+          <option value="json">json</option>
+          <option value="js">javascript code</option>
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-2">
         <label className="font-bold flex items-center gap-2" htmlFor="response">
-          Response <FiInfo size={15} title="Response can be text or json." />
+          Response
         </label>
         <ReactCodeMirror
-          extensions={[json()]}
+          extensions={[json(), javascript()]}
           value={response}
           onChange={(e) => setResponse(e)}
           className="w-full mt-2 border bg-gray-200"

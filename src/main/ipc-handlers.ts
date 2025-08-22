@@ -48,7 +48,7 @@ export function registerFsIpcHandlers(
       }
 
       event.reply('fs-load-servers', validServers);
-    } catch (err) {}
+    } catch (err) { }
   });
 
   ipcMain.on('fs-add-server', (event, args) => {
@@ -192,11 +192,30 @@ export function registerServerIpcHandlers(
           res.set(endpointHeader.key, endpointHeader.value);
         }
 
-        const isJson = isValidJson(endpoint.response);
-        if (isJson) {
-          res.status(endpoint.responseCode).json(JSON.parse(endpoint.response));
-        } else {
-          res.status(endpoint.responseCode).send(endpoint.response);
+        try {
+          switch (endpoint.responseType) {
+            case 'text': {
+              res.status(endpoint.responseCode).send(endpoint.response)
+            }
+            case 'json': {
+              if (isValidJson(endpoint.response)) { 
+                res.status(endpoint.responseCode).json(endpoint.response);
+              } else {
+                res.status(endpoint.responseCode).send(endpoint.response)
+              }
+            }
+            case 'js': {
+              const resp = eval(endpoint.response);
+              console.log(resp, "poop");
+              if (isValidJson(resp)) {
+                res.status(endpoint.responseCode).json(resp);
+              } else {
+                res.status(endpoint.responseCode).send(JSON.stringify(resp));
+              }
+            }
+          }
+        } catch (err: any) {
+          res.status(500).send(err.message);
         }
       });
     }

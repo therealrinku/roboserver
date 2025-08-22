@@ -17,6 +17,7 @@ export interface IEndpoint {
   id: number;
   type: string;
   route: string;
+  responseType: "text" | "json" | "js";
   responseCode: string;
   response: string;
   isActive: boolean;
