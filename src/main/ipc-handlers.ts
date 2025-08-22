@@ -194,24 +194,27 @@ export function registerServerIpcHandlers(
 
         try {
           switch (endpoint.responseType) {
+            case 'html' : {
+              res.type("html").status(endpoint.responseCode).send(endpoint.response);
+            }
             case 'text': {
-              res.status(endpoint.responseCode).send(endpoint.response)
+              res.type("text").status(endpoint.responseCode).send(endpoint.response)
             }
             case 'json': {
               if (isValidJson(endpoint.response)) { 
                 res.status(endpoint.responseCode).json(endpoint.response);
               } else {
-                res.status(endpoint.responseCode).send(endpoint.response)
+                res.type("text").status(endpoint.responseCode).send(endpoint.response)
               }
             }
             case 'js': {
               const resp = eval(endpoint.response);
               console.log(resp, "poop");
-              if (isValidJson(resp)) {
+              // if (isValidJson(resp)) {
                 res.status(endpoint.responseCode).json(resp);
-              } else {
-                res.status(endpoint.responseCode).send(JSON.stringify(resp));
-              }
+              // } else {
+              //   res.type("text").status(endpoint.responseCode).send(JSON.stringify(resp));
+              // }
             }
           }
         } catch (err: any) {

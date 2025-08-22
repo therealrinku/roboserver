@@ -169,6 +169,7 @@ export default function EndpointForm({
           onChange={(e) => setResponseType(e.target.value)}
         >
           <option value="text">text</option>
+          <option value="html">html</option>
           <option value="json">json</option>
           <option value="js">javascript code</option>
         </select>
