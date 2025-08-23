@@ -1,4 +1,4 @@
-import { FiPause, FiPlay, FiZap, FiZapOff } from 'react-icons/fi';
+import { FiPlay, FiStopCircle, FiZap, FiZapOff } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import useAppState from '../hooks/use-app-state';
 import EmptyState from '../components/common/empty-state';
@@ -64,7 +64,7 @@ function ServerList() {
                 {server?.isLoading ? (
                   <Loading />
                 ) : server?.isRunning ? (
-                  <FiPause color="red" size={15} />
+                  <FiStopCircle color="red" size={15} />
                 ) : (
                   <FiPlay size={15} />
                 )}

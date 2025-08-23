@@ -1,10 +1,10 @@
 import {
   FiChevronLeft,
   FiLink,
-  FiPause,
   FiPlay,
   FiPlus,
   FiSettings,
+  FiStopCircle,
   FiTrash2,
   FiX,
 } from 'react-icons/fi';
@@ -82,7 +82,7 @@ export default function TopBar() {
             {server?.isLoading ? (
               <Loading />
             ) : server?.isRunning ? (
-              <FiPause color="red" size={15} />
+              <FiStopCircle color="red" size={15} />
             ) : (
               <FiPlay size={15} />
             )}
