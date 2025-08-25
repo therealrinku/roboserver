@@ -111,7 +111,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
     window.electron.ipcRenderer.on('stop-server', (args) => {
       //@ts-expect-error
-      const { server } = args;
+      const server = args.server as IServer;
 
       setServers((prevStateOfServers) => {
         const copiedServers = [...prevStateOfServers];
