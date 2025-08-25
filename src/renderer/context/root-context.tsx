@@ -75,7 +75,10 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     window.electron.ipcRenderer.on('error-happened', (args) => {
       //@ts-expect-error
-      const { server, message } = args;
+      const server = args.server as IServer;
+      //@ts-expect-error
+      const message = args.message as string;
+
       alert(message || 'Something went wrong');
 
       if (!server) {
@@ -94,7 +97,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
     window.electron.ipcRenderer.on('start-server', (args) => {
       //@ts-expect-error
-      const { server } = args;
+      const server = args.server as IServer;
 
       setServers((prevStateOfServers) => {
         const copiedServers = [...prevStateOfServers];
