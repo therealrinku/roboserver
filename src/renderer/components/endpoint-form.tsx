@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import type { IEndpoint, IHeader } from '../global';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
-import {javascript} from "@codemirror/lang-javascript"
+import { javascript } from "@codemirror/lang-javascript"
 import { FiTrash2 } from 'react-icons/fi';
 
 export default function EndpointForm({
@@ -24,7 +24,7 @@ export default function EndpointForm({
   const [response, setResponse] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [responseCode, setResponseCode] = useState('200');
-  const [responseType, setResponseType] = useState<Pick<IEndpoint,'responseType'>['responseType']>("text");
+  const [responseType, setResponseType] = useState<Pick<IEndpoint, 'responseType'>['responseType']>("text");
   const [headers, setHeaders] = useState<IHeader[]>([{ key: '', value: '' }]);
 
   useEffect(() => {
@@ -40,6 +40,19 @@ export default function EndpointForm({
       }
     }
   }, [initialState, isEditMode]);
+
+  useEffect(() => {
+    if (!response && responseType === "js") {
+        setResponse(`//sample javascript code
+async function fetch(){
+  const resp = await fetch("https://jsonplaceholder.typicode.com/users");
+  const data = await resp.json();
+  return data;
+}
+
+fetch();`)
+    }
+  }, [responseType])
 
   function handleAddNewHeader() {
     setHeaders((prev) => [...prev, { key: '', value: '' }]);
