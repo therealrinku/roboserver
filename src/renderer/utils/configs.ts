@@ -14,6 +14,7 @@ export const demoServer: IServer = {
       route: '/ping',
       response: 'pong',
       responseCode: '200',
+      responseType: 'text',
       type: 'get',
       isActive: true,
       headers: [
