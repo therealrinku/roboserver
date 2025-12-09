@@ -28,6 +28,7 @@
 ## Download from [here](https://github.com/therealrinku/roboserver/releases)
 
 ## Contribute to the Project
+⚠️ First make sure node v20 is installed on your system and it's used during the process below
 
 To run this project locally, follow these steps:
 
