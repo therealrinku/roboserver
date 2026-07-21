@@ -33,16 +33,20 @@
 To run this project locally, follow these steps:
 
 1. Clone the repository.
-   ```bash
+   ```
    git clone https://github.com/therealrinku/roboserver.git
+   cd roboserver
+   ```
 
 2. Install the dependencies.
-   ```bash
+   ```
    yarn install
+   ```
 
 3. Run the project.
-   ```bash
+   ```
    yarn start
+   ```
 
 ## Build and create a package for your platform
     yarn package
